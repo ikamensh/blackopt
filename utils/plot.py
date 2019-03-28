@@ -11,6 +11,8 @@ import numpy as np
 import copy
 import statistics
 
+from utils.running_avg import apply_running_average
+
 
 def maybe_make_dir(folder):
     try:
@@ -96,6 +98,9 @@ def plot_group(metrics: Dict[str, Metric], folder, name=None):
             else:
                 stdev.append(0)
         stdev = np.array( stdev )
+
+        avg = apply_running_average(avg, 0.95)
+        stdev = apply_running_average(stdev, 0.95)
 
         plt.plot(metric.data.keys(), avg, label=label, linewidth = 0.65)
         plt.fill_between(metric.data.keys(), avg-stdev, avg+stdev, alpha=0.2)
