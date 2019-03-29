@@ -5,6 +5,7 @@ from algorithms import RandomSearch
 from algorithms.solver import Solver
 from concurrent import futures
 
+
 def solve_n_times(solver: Solver, n: int, n_steps: int):
     metrics = []
 
@@ -15,6 +16,7 @@ def solve_n_times(solver: Solver, n: int, n_steps: int):
         metrics.append(m)
 
     return sum(metrics)
+
 
 problem = BumpyProblem.random_problem(100, 200)
 docu = PlotProgress(problem)
@@ -31,8 +33,10 @@ n_trials = 3
 
 pool = futures.ProcessPoolExecutor()
 
+
 def maping(solver):
-    return solve_n_times(solver, n = n_trials, n_steps=n_steps)
+    return solve_n_times(solver, n=n_trials, n_steps=n_steps)
+
 
 metrics = pool.map(maping, solvers)
 

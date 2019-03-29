@@ -20,20 +20,20 @@ class StepProblem(Problem):
         thresholds = [random.random() for i in range(n_dim)]
         return StepProblem(thresholds)
 
-
     @staticmethod
-    def _step_function( values: List[float], thresholds: List[float]) -> int:
+    def _step_function(values: List[float], thresholds: List[float]) -> int:
         result = 0
 
         for val, threshold in zip(values, thresholds):
-            if val > threshold: result += 1
+            if val > threshold:
+                result += 1
 
         return result
 
-    @lru_cache(maxsize=int(2**16) )
+    @lru_cache(maxsize=int(2**16))
     def evaluate(self, s: StepSolution) -> int:
         self.eval_count += 1
-        return self._step_function(s.values, self.thresholds)
+        return self._step_function(s.genes, self.thresholds)
 
     def random_solution(self) -> Solution:
         values = [random.random() for i in range(self.n_dim)]
@@ -46,7 +46,7 @@ class StepProblem(Problem):
 class StepSolution(Solution):
     def __init__(self, problem, values):
         self.problem = problem
-        self.values = values
+        self.genes = values
 
     @property
     def score(self):
@@ -54,10 +54,21 @@ class StepSolution(Solution):
 
     def mutate(self, rate: float):
         new_values = []
-        for v in self.values:
+        for v in self.genes:
             if random.random() < rate:
                 new_values.append(random.random())
             else:
                 new_values.append(v)
 
         return StepSolution(self.problem, new_values)
+
+    def crossover(self, other: StepSolution):
+        crossover_point = random.randint(1, len(self.genes) - 1)
+
+        child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
+        child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
+
+        return [
+            StepSolution(
+                self.problem, child_a), StepSolution(
+                self.problem, child_b)]

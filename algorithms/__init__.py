@@ -1,2 +1,3 @@
 from algorithms.specific.random_search import RandomSearch
 from algorithms.specific.hill_climb import HillClimber
+from algorithms.specific.genetic_algorithm import GeneticAlgorithm

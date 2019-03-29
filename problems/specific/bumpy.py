@@ -10,9 +10,11 @@ from collections import namedtuple
 
 sin_expr = namedtuple("sin_expr", "i j k")
 
+
 def evaluate_sin(solution: List[float], expr: sin_expr) -> float:
     arg = solution[expr.i] * solution[expr.j] + expr.k
     return math.sin(arg)
+
 
 class BumpyProblem(Problem):
     """
@@ -28,18 +30,22 @@ class BumpyProblem(Problem):
     @staticmethod
     def random_problem(n_dim: int, n_expr: int):
 
-
-        exprs = [sin_expr(random.randint(0,n_dim-1), random.randint(0,n_dim-1), random.random())
-                 for _ in range(n_expr)]
+        exprs = [
+            sin_expr(
+                random.randint(
+                    0,
+                    n_dim - 1),
+                random.randint(
+                    0,
+                    n_dim - 1),
+                random.random()) for _ in range(n_expr)]
 
         return BumpyProblem(n_dim, exprs)
 
-
-
-    @lru_cache(maxsize=int(2**16) )
+    @lru_cache(maxsize=int(2**16))
     def evaluate(self, s: BumpySolution) -> int:
         self.eval_count += 1
-        return sum(evaluate_sin(s.values, expr) for expr in self.expressions)
+        return sum(evaluate_sin(s.genes, expr) for expr in self.expressions)
 
     def random_solution(self) -> Solution:
         values = [random.random() for i in range(self.n_dim)]
@@ -52,7 +58,7 @@ class BumpyProblem(Problem):
 class BumpySolution(Solution):
     def __init__(self, problem, values):
         self.problem = problem
-        self.values = values
+        self.genes = values
 
     @property
     def score(self):
@@ -60,10 +66,21 @@ class BumpySolution(Solution):
 
     def mutate(self, rate: float):
         new_values = []
-        for v in self.values:
+        for v in self.genes:
             if random.random() < rate:
                 new_values.append(random.random())
             else:
                 new_values.append(v)
 
         return BumpySolution(self.problem, new_values)
+
+    def crossover(self, other: BumpySolution):
+        crossover_point = random.randint(1, len(self.genes) - 1)
+
+        child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
+        child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
+
+        return [
+            BumpySolution(
+                self.problem, child_a), BumpySolution(
+                self.problem, child_b)]

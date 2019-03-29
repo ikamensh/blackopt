@@ -5,16 +5,16 @@ from functools import lru_cache
 
 from problems.problem import Problem, Solution
 
-from problems.tsp.city import City
+from problems.specific.tsp.city import City
 import math
 
 
 class TspProblem(Problem):
     name = "Tsp"
 
-    def __init__(self, cities : List[City]):
+    def __init__(self, cities: List[City]):
         self.cities = cities
-        self.n_dim = len( cities[0].coordinates )
+        self.n_dim = len(cities[0].coordinates)
         self.eval_count = 0
         self.max_dist = len(self.cities) * math.sqrt(self.n_dim)
 
@@ -28,7 +28,7 @@ class TspProblem(Problem):
         random.shuffle(cpy)
         return TspSolution(self, cpy)
 
-    @lru_cache(maxsize=int(2**16) )
+    @lru_cache(maxsize=int(2**16))
     def evaluate(self, s: TspSolution):
         self.eval_count += 1
         return self.max_dist - self.route_distance(s.route)
@@ -45,7 +45,6 @@ class TspProblem(Problem):
         return f"Tsp {len(self.cities)} cities & {self.n_dim} dim"
 
 
-
 class TspSolution(Solution):
 
     def __init__(self, problem: TspProblem, route: List[City]):
@@ -57,9 +56,7 @@ class TspSolution(Solution):
     def score(self):
         return self.problem.evaluate(self)
 
-
     def mutate(self, mutationRate: float) -> TspSolution:
-
         route = self.route
 
         for i in range(len(route)):
@@ -69,5 +66,11 @@ class TspSolution(Solution):
 
         return TspSolution(self.problem, route)
 
+    def crossover(self, other: TspSolution):
+        crossover_point = random.randint(1, len(self.route) - 1)
 
+        child_left = self.route[:crossover_point]
+        check = {city.uid for city in child_left}
+        child_right = [city for city in other.route if city.uid not in check]
 
+        return [TspSolution(self.problem, child_left + child_right)]

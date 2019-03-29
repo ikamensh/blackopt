@@ -25,7 +25,6 @@ for problem in problems:
 
         best_score_metrics[str(solver)] = sum(metrics)
 
-
     random_search_metrics = []
     rs = RandomSearch(problem)
     for i in range(5):
@@ -37,4 +36,3 @@ for problem in problems:
     best_score_metrics[str(rs)] = sum(random_search_metrics)
 
     docu.generate_report(best_score_metrics)
-

@@ -14,7 +14,6 @@ class HillClimber(Solver):
 
         assert 0 < mutation_rate <= 1
 
-
     def solve(self, n_evaluations):
 
         best_score_metric = Metric(x_label="evaluations", y_label="best_score")
@@ -26,15 +25,10 @@ class HillClimber(Solver):
                 self.best_solution = solution
 
             if self.problem.eval_count % doc_freq == 0:
-                best_score_metric.add_record(self.problem.eval_count, self.best_solution.score)
+                best_score_metric.add_record(
+                    self.problem.eval_count, self.best_solution.score)
 
         return best_score_metric
 
     def __str__(self):
         return f"{self.name} {self.mutation_rate}"
-
-
-
-
-
-

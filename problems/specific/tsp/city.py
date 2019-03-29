@@ -2,6 +2,8 @@ import numpy as np
 from functools import lru_cache
 
 np.random.seed(1)
+
+
 class City:
 
     n_cities = 0
@@ -24,4 +26,4 @@ class City:
         return self.uid
 
     def __repr__(self):
-        return  f"City {self.uid}"
+        return f"City {self.uid}"

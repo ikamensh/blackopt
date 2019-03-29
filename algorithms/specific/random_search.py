@@ -1,7 +1,7 @@
 from problems.problem import Problem, Solution
 from algorithms.solver import Solver
-from algorithms.document import PlotProgress
 from utils.plot import Metric
+
 
 class RandomSearch(Solver):
     name = "random search"
@@ -9,7 +9,6 @@ class RandomSearch(Solver):
     def __init__(self, problem: Problem):
         self.problem = problem
         self.best_solution: Solution = problem.random_solution()
-        self.docu = PlotProgress(self)
 
     def solve(self, n_evaluations):
 
@@ -22,13 +21,7 @@ class RandomSearch(Solver):
                 self.best_solution = solution
 
             if self.problem.eval_count % doc_freq == 0:
-                best_score_metric.add_record(self.problem.eval_count, self.best_solution.score)
-
+                best_score_metric.add_record(
+                    self.problem.eval_count, self.best_solution.score)
 
         return best_score_metric
-
-
-
-
-
-

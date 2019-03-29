@@ -3,7 +3,6 @@ import abc
 from typing import List
 
 
-
 class Problem(abc.ABC):
 
     eval_count: int = None
@@ -16,14 +15,13 @@ class Problem(abc.ABC):
     def random_solution(self) -> Solution:
         raise NotImplementedError()
 
-
-
     @abc.abstractmethod
     def __str__(self):
         raise NotImplementedError()
 
+
 class Solution(abc.ABC):
-    problem : Problem = None
+    problem: Problem = None
 
     @abc.abstractmethod
     def mutate(self, rate: float) -> Solution:
@@ -34,13 +32,6 @@ class Solution(abc.ABC):
     def score(self):
         raise NotImplementedError()
 
-    # @abc.abstractmethod
-    # def crossover(self, other: Solution) -> List[Solution]:
-    #     raise NotImplementedError()
-
-
-
-
-
-
-
+    @abc.abstractmethod
+    def crossover(self, other: Solution) -> List[Solution]:
+        raise NotImplementedError()

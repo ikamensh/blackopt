@@ -13,15 +13,15 @@ class PlotProgress:
         self.problem = problem
         self.timestamp = datetime.datetime.now().strftime('%m-%d_%H-%M-%S')
 
-        self.problem_path = os.path.join(root_dir, "reports", str(self.problem))
+        self.problem_path = os.path.join(
+            root_dir, "reports", str(self.problem))
 
         self.solver = solver
         if solver:
-            self.solver_path = os.path.join(self.problem_path, self.solver.name, self.timestamp)
+            self.solver_path = os.path.join(
+                self.problem_path, self.solver.name, self.timestamp)
 
         self.create_report_folders()
-
-
 
     def create_report_folders(self):
         if self.solver:
@@ -34,15 +34,12 @@ class PlotProgress:
     def generate_report(self, metrics: Dict[str, Metric]):
         """ plot multiple curves from the metrics dict [label , Metric]"""
         if self.solver:
-            plot_group(metrics, self.solver_path, name=f"Best scores @ {self.timestamp}")
+            plot_group(
+                metrics,
+                self.solver_path,
+                name=f"Best scores @ {self.timestamp}")
         else:
-            plot_group(metrics, self.problem_path, name=f"Best scores @ {self.timestamp}")
-
-
-
-
-
-
-
-
-
+            plot_group(
+                metrics,
+                self.problem_path,
+                name=f"Best scores @ {self.timestamp}")
