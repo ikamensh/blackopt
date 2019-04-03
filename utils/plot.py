@@ -5,7 +5,7 @@ import statistics
 import copy
 import numpy as np
 from collections import defaultdict
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import matplotlib
 matplotlib.use('Qt4Agg')
@@ -27,8 +27,8 @@ def maybe_make_dir(folder):
 class Metric:
     x_label: str
     y_label: str
-    data: Dict[int, List[float]] = field(
-        default_factory=lambda: defaultdict(list))
+    data: Dict[int, List[float]] = field(default_factory=lambda: defaultdict(list))
+    style_kwargs: Dict[str: Any] = field(default_factory=lambda: {})
 
     def add_record(self, x: int, y: float):
         self.data[x].append(y)
@@ -38,6 +38,7 @@ class Metric:
 
     def __add__(self, other: Metric):
         assert self.data.keys() == other.data.keys()
+        assert self.style_kwargs == other.style_kwargs
 
         result = copy.copy(self)
         for k, v in other.data.items():
@@ -105,14 +106,19 @@ def plot_group(metrics: Dict[str, Metric], folder: str, name: str = None):
         smoothen = len(avg) / (len(avg) + 100)
 
         avg = apply_running_average(avg, smoothen)
-        stdev = apply_running_average(stdev, smoothen)
+        stdev = apply_running_average(stdev, smoothen) / 3
 
-        plt.plot(metric.data.keys(), avg, label=label, linewidth=0.65)
+        style = {"linewidth":0.65}
+        style.update(metric.style_kwargs)
+        plt.plot(metric.data.keys(), avg, label=label, **style)
+        maybe_color = {'color': style['color']} if 'color' in style else {}
         plt.fill_between(
             metric.data.keys(),
             avg - stdev,
             avg + stdev,
-            alpha=0.2)
+            alpha=0.2,
+            **maybe_color
+        )
 
     plt.legend(loc='best')
     path = os.path.join(

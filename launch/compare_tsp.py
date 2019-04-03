@@ -1,4 +1,3 @@
-from algorithms import HillClimber
 from problems import TspProblem
 from algorithms.document import PlotProgress
 from algorithms import RandomSearch
@@ -18,42 +17,54 @@ def solve_n_times(solver: Solver, n: int, n_steps: int):
 
     return sum(metrics)
 
+problems = [TspProblem.random_problem(n_dim, cities) for n_dim in [2, 10, 50]
+            for cities in [40, 200, 1000]]
 
-problem = TspProblem.random_problem(n_dim=5, cities=200)
-docu = PlotProgress(problem)
+# problem = TspProblem.random_problem(n_dim=5, cities=200)
+for problem in problems:
 
-solvers = []
-for popsize in [10, 50, 250]:
-    # solvers += [HillClimber(problem, mutation_rate=mr) for mr in [0.002, 0.005, 0.01]]
-    solvers.append(RandomSearch(problem))
-    solvers += [GeneticAlgorithm(problem, popsize, mr, elite_size, heavy_tail_mutation=heavy)
-                for mr in [5e-3, 0.01, 0.03]
-                for elite_size in [0, 1, popsize//10]
-                for heavy in [True, False]]
+    for popsize in [10, 50]:
+        docu = PlotProgress(problem)
 
+        solvers = []
 
-    best_score_metrics = {}
-
-    n_steps = int(5e2)
-    n_trials = 2
-
-    pool = futures.ProcessPoolExecutor()
-
-
-    def maping(solver):
-        try:
-            return solve_n_times(solver, n=n_trials, n_steps=n_steps)
-        except:
-            return None
+        solvers.append(RandomSearch(problem))
+        for elite_size, color in zip({1, popsize//10}, ['purple', 'teal', 'brown']):
+            for mr, linewidth in zip([5e-4, 5e-3, 0.01], [0.5, 1.1, 1.8]):
+                for heavy in [True, False]:
+                    style = {}
+                    if heavy:
+                        style['dashes'] = [2, 2, 10, 2]
+                    style['linewidth'] = linewidth
+                    style['color'] = color
+                    ga = GeneticAlgorithm(problem, popsize, mr, elite_size, heavy_tail_mutation=heavy,
+                                          plot_kwargs=style)
+                    solvers.append(ga)
 
 
-    metrics = pool.map(maping, solvers)
+        best_score_metrics = {}
 
-    for solver, result in zip(solvers, metrics):
-        if result:
-            best_score_metrics[str(solver)] = result
+        n_steps = int(2e5)
+        n_trials = 8
 
-    # for solver in solvers:
-    #     best_score_metrics[str(solver)] = solve_n_times(solver, n = n_trials, n_steps=n_steps)
+        pool = futures.ProcessPoolExecutor()
 
-    docu.generate_report(best_score_metrics)
+
+        def maping(solver):
+            try:
+                return solve_n_times(solver, n=n_trials, n_steps=n_steps)
+            except Exception as e:
+                print(e,'In mapping')
+                return None
+
+        if __name__ == "__main__":
+            metrics = pool.map(maping, solvers)
+
+            for solver, result in zip(solvers, metrics):
+                if result:
+                    best_score_metrics[str(solver)] = result
+
+            # for solver in solvers:
+            #     best_score_metrics[str(solver)] = solve_n_times(solver, n = n_trials, n_steps=n_steps)
+
+            docu.generate_report(best_score_metrics)
