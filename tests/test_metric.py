@@ -51,5 +51,17 @@ def test_summ_different_keys():
     m2.add_many(2, [3, 4, 15])
     m2.add_many(4, [7])
 
-    with pytest.raises(AssertionError):
-        m3 = m1 + m2
+    m3 = m1 + m2
+
+    assert all([x in m3.data for x in [2,3,4]])
+
+
+def test_summ_many():
+    import random
+
+    metrics = [Metric('x', 'y') for x in range(10)]
+    for m in metrics:
+        for i in range(50):
+            m.add_record(random.random(), random.random())
+
+    m11 = sum(metrics)
