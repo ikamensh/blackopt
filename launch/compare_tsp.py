@@ -44,8 +44,8 @@ for problem in problems:
 
         best_score_metrics = {}
 
-        n_steps = int(2e5)
-        n_trials = 8
+        n_steps = int(2e3)
+        n_trials = 3
 
         pool = futures.ProcessPoolExecutor()
 

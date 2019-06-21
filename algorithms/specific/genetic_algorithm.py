@@ -1,6 +1,6 @@
 from problems.problem import Problem, Solution
 from algorithms.solver import Solver
-from utils.plot import Metric
+from ilya_ezplot import Metric
 import numpy as np
 from typing import List, Dict
 import random

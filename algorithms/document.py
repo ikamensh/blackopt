@@ -3,7 +3,7 @@ from problems import Problem
 import datetime
 import os
 from config import root_dir
-from utils.plot import Metric, plot_group
+from ilya_ezplot import Metric, plot_group
 from typing import Dict
 
 
