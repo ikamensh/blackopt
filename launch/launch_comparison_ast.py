@@ -7,20 +7,30 @@ from problems import ExpressionMatchProblem
 import pathos
 
 
-def solve_n_times(solver: Solver, n: int, n_steps: int):
+# def solve_n_times(solver: Solver, n: int, n_steps: int):
+#     metrics = []
+#
+#     for i in range(n):
+#         solver.reset()
+#         m = solver.solve(n_steps)
+#         print(solver, i)
+#         metrics.append(m)
+#
+#     return sum(metrics)
+
+# n_steps = int(5e2)
+# n_trials = 2
+
+def maping(solver):
     metrics = []
 
-    for i in range(n):
+    for i in range(10):
         solver.reset()
-        m = solver.solve(n_steps)
+        m = solver.solve(int(5e4))
         print(solver, i)
         metrics.append(m)
 
     return sum(metrics)
-
-
-def maping(solver):
-    return solve_n_times(solver, n=n_trials, n_steps=n_steps)
 
 
 if __name__ == "__main__":
@@ -35,8 +45,6 @@ if __name__ == "__main__":
         GeneticAlgorithm(problem, popsize=15, mutation_rate=0.5, elite_size=2),
     ]
 
-    n_steps = int(2e3)
-    n_trials = 10
 
     pool = pathos.pools.ProcessPool()
 

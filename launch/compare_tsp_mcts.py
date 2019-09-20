@@ -45,8 +45,8 @@ for elite_size, color in zip({1, popsize//10}, ['purple', 'teal', 'brown']):
 
 best_score_metrics = {}
 
-n_steps = int(2e5)
-n_trials = 3
+n_steps = int(1e6)
+n_trials = 5
 
 pool = futures.ProcessPoolExecutor()
 

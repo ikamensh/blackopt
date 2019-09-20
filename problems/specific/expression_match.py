@@ -1,10 +1,13 @@
 from __future__ import annotations
 import random
+import time
 
 from problems.problem import Problem, Solution
 from typing import Callable
 
 import numpy as np
+
+from functools import lru_cache
 
 
 from expr_tree import ExpressionTree
@@ -13,6 +16,7 @@ class SinGpSolution(Solution):
     def __init__(self, problem, expr_tree: ExpressionTree):
         self.problem = problem
         self.tree =  expr_tree
+        self.time = None
 
     @property
     def score(self):
@@ -25,6 +29,14 @@ class SinGpSolution(Solution):
         return [
             SinGpSolution(self.problem, ExpressionTree.crossover(self.tree, other.tree))
         ]
+
+    def metrics(self):
+        result = {
+            "nodes" : len(self.tree.nodes)
+        }
+        if self.time:
+            result['time'] = self.time
+
 
 class ExpressionMatchProblem(Problem):
 
@@ -45,20 +57,24 @@ class ExpressionMatchProblem(Problem):
     def random_problem(*args):
         raise NotImplementedError()
 
+    @lru_cache(maxsize=int(2**10))
     def evaluate(self, s: SinGpSolution) -> float:
         self.eval_count += 1
 
         # idx = np.random.randint(0, self.resolution, size=int( (self.resolution) ** (1/2) ) )
         # x_test, y_test = self.X[idx], self.Y[idx]
 
-
+        t = time.clock()
         y_pred = [s.tree.eval(x) for x in self.X]
+        s.time = time.clock() - t
 
         y_pred = np.array(y_pred)
         errors = self.Y - y_pred
         errors = errors ** 2
 
+
         return - np.mean(np.log(errors)) - 0.001 * ( len(s.tree.nodes) + s.tree.penalty )
+
 
     def random_solution(self) -> Solution:
         depth = random.randint(2, 8)

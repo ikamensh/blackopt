@@ -15,7 +15,7 @@ solver = GeneticAlgorithm(problem, 15, 0.5, 2)
 # solver = HillClimber(problem, 0.5)
 # solver = RandomSearch(problem)
 
-progress_metric = solver.solve(1000)
+progress_metric = solver.solve(10000)
 answer : ExpressionMatchProblem.solution_cls  = solver.best_solution
 answer.tree.write_down()
 

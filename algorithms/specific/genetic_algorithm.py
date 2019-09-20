@@ -1,6 +1,5 @@
 from problems.problem import Problem, Solution
 from algorithms.solver import Solver
-from ilya_ezplot import Metric
 import numpy as np
 from typing import List, Dict
 import random
@@ -24,17 +23,16 @@ class GeneticAlgorithm(Solver):
         assert popsize > elite_size
         assert isinstance(elite_size, int)
 
-        self.heavy_tail_mutation = heavy_tail_mutation
+        super().__init__(problem, plot_kwargs)
 
+        self.heavy_tail_mutation = heavy_tail_mutation
         self._mutation_rate = mutation_rate
-        self.problem = problem
         self.popsize = popsize
         self.elite_size = elite_size
         self.population = [problem.random_solution() for _ in range(popsize)]
 
         self.generation = 1
         self.avg = None
-        self.plot_kwargs = plot_kwargs or {}
         self.rank()
 
     @property
@@ -45,15 +43,8 @@ class GeneticAlgorithm(Solver):
         else:
             return self._mutation_rate
 
-    def solve(self, n_evaluations) -> Metric:
+    def solve(self, n_evaluations):
 
-        best_score_metric = Metric(
-            name="score_history",
-            x_label="evaluations",
-            y_label="best_score",
-            style_kwargs=self.plot_kwargs,
-        )
-        best_score_metric.add_record(self.problem.eval_count, self.best_solution.score)
 
         while self.problem.eval_count < n_evaluations:
 
@@ -62,14 +53,11 @@ class GeneticAlgorithm(Solver):
             self.population = next_generation
 
             self.rank()
-            best_score_metric.add_record(
-                self.problem.eval_count, self.best_solution.score
-            )
+            self.record_result()
             self.generation += 1
             print(self.generation)
 
         print(f"{self} is Done in {self.generation} generations")
-        return best_score_metric
 
     def rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)
