@@ -1,6 +1,5 @@
 from problems.problem import Problem, Solution
 from algorithms.solver import Solver
-from ilya_ezplot import Metric
 import numpy as np
 from typing import List, Dict
 
@@ -29,23 +28,20 @@ class GeneticAlgorithmMcts(Solver):
 
         assert popsize > 1
 
-        self.problem = problem
+        super().__init__(problem, plot_kwargs)
         self.popsize = popsize
         self.population = [problem.random_solution() for _ in range(popsize)]
 
         self.generation = 1
         self.avg = None
-        self.plot_kwargs = plot_kwargs or {}
         self.rank()
         ControlledParam.init(self, self.ctrl_params)
 
 
     def solve(self, n_evaluations):
 
-        best_score_metric = Metric(x_label="evaluations", y_label="best_score",
-                                   style_kwargs=self.plot_kwargs)
-        best_score_metric.add_record(
-            self.problem.eval_count, self.best_solution.score)
+
+
 
         score_before = self.best_solution.score
 
@@ -57,8 +53,7 @@ class GeneticAlgorithmMcts(Solver):
             self.population = next_generation
 
             self.rank()
-            best_score_metric.add_record(
-                self.problem.eval_count, self.best_solution.score)
+            self.record()
             self.generation += 1
 
             if self.generation % 10 == 0:
@@ -67,7 +62,6 @@ class GeneticAlgorithmMcts(Solver):
                 score_before = self.best_solution.score
 
         print(f"{self} is Done in {self.generation} generations")
-        return best_score_metric
 
     def rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)

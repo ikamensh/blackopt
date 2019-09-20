@@ -53,7 +53,7 @@ class GeneticAlgorithm(Solver):
             self.population = next_generation
 
             self.rank()
-            self.record_result()
+            self.record()
             self.generation += 1
             print(self.generation)
 

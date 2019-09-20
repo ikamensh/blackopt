@@ -12,10 +12,11 @@ from functools import lru_cache
 
 from expr_tree import ExpressionTree
 
+
 class SinGpSolution(Solution):
     def __init__(self, problem, expr_tree: ExpressionTree):
         self.problem = problem
-        self.tree =  expr_tree
+        self.tree = expr_tree
         self.time = None
 
     @property
@@ -31,11 +32,9 @@ class SinGpSolution(Solution):
         ]
 
     def metrics(self):
-        result = {
-            "nodes" : len(self.tree.nodes)
-        }
+        result = {"nodes": len(self.tree.nodes), "penalty": self.tree.penalty}
         if self.time:
-            result['time'] = self.time
+            result["time"] = self.time
 
 
 class ExpressionMatchProblem(Problem):
@@ -57,7 +56,7 @@ class ExpressionMatchProblem(Problem):
     def random_problem(*args):
         raise NotImplementedError()
 
-    @lru_cache(maxsize=int(2**10))
+    @lru_cache(maxsize=int(2 ** 10))
     def evaluate(self, s: SinGpSolution) -> float:
         self.eval_count += 1
 
@@ -72,9 +71,7 @@ class ExpressionMatchProblem(Problem):
         errors = self.Y - y_pred
         errors = errors ** 2
 
-
-        return - np.mean(np.log(errors)) - 0.001 * ( len(s.tree.nodes) + s.tree.penalty )
-
+        return -np.mean(np.log(errors)) - 0.001 * (len(s.tree.nodes) + s.tree.penalty)
 
     def random_solution(self) -> Solution:
         depth = random.randint(2, 8)
@@ -82,6 +79,3 @@ class ExpressionMatchProblem(Problem):
 
     def __str__(self):
         return f"{self.__class__.__name__}"
-
-
-

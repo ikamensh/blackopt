@@ -35,3 +35,6 @@ class Solution(abc.ABC):
     @abc.abstractmethod
     def crossover(self, other: Solution) -> List[Solution]:
         raise NotImplementedError()
+
+    def metrics(self):
+        return {}

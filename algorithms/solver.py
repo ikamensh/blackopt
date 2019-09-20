@@ -16,10 +16,25 @@ class Solver(abc.ABC):
             y_label="best_score",
             style_kwargs=plot_kwargs or {},
         )
+        self.best_solution: Solution = problem.random_solution()
 
+        solution_metric_dict = self.best_solution.metrics()
+        self.solution_metrics = {
+            k: Metric(name=k, x_label="evaluations")
+            for k in solution_metric_dict.keys()
+        }
 
-    def record_result(self):
-        self.best_score_metric.add_record(self.problem.eval_count, self.best_solution.score)
+        self.record()
+
+    def record(self):
+        self.best_score_metric.add_record(
+            self.problem.eval_count, self.best_solution.score
+        )
+
+        solution_metric_dict = self.best_solution.metrics()
+
+        for k, v in solution_metric_dict:
+            self.solution_metrics[k].add_record(self.problem.eval_count, v)
 
     @abc.abstractmethod
     def solve(self, *args, **kwargs):
