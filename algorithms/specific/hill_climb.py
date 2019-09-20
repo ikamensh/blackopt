@@ -2,7 +2,6 @@ from problems.problem import Problem, Solution
 from algorithms.solver import Solver
 from ilya_ezplot import Metric
 
-
 class HillClimber(Solver):
     name = "hill climb"
 
@@ -16,17 +15,17 @@ class HillClimber(Solver):
 
     def solve(self, n_evaluations):
 
-        best_score_metric = Metric(x_label="evaluations", y_label="best_score")
-        doc_freq = max(1, n_evaluations // 500)
+        best_score_metric = Metric(name=self.name, x_label="evaluations", y_label="best_score")
+        doc_freq = 1 + n_evaluations // 500
 
-        while self.problem.eval_count < n_evaluations:
+        for i in range(n_evaluations):
             solution = self.best_solution.mutate(self.mutation_rate)
             if solution.score > self.best_solution.score:
                 self.best_solution = solution
 
-            if self.problem.eval_count % doc_freq == 0:
+            if i % doc_freq == 0:
                 best_score_metric.add_record(
-                    self.problem.eval_count, self.best_solution.score)
+                    i, self.best_solution.score)
 
         return best_score_metric
 

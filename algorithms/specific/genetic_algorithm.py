@@ -5,11 +5,19 @@ import numpy as np
 from typing import List, Dict
 import random
 
+
 class GeneticAlgorithm(Solver):
     name = "GA"
 
-    def __init__(self, problem: Problem, popsize: int, mutation_rate: float, elite_size: int,
-                 heavy_tail_mutation = False, plot_kwargs: Dict = None):
+    def __init__(
+        self,
+        problem: Problem,
+        popsize: int,
+        mutation_rate: float,
+        elite_size: int,
+        heavy_tail_mutation=False,
+        plot_kwargs: Dict = None,
+    ):
 
         assert 0 < mutation_rate <= 1
         assert popsize > 1
@@ -29,7 +37,6 @@ class GeneticAlgorithm(Solver):
         self.plot_kwargs = plot_kwargs or {}
         self.rank()
 
-
     @property
     def mutation_rate(self):
         if self.heavy_tail_mutation:
@@ -38,25 +45,28 @@ class GeneticAlgorithm(Solver):
         else:
             return self._mutation_rate
 
+    def solve(self, n_evaluations) -> Metric:
 
-    def solve(self, n_evaluations):
-
-        best_score_metric = Metric(x_label="evaluations", y_label="best_score",
-                                   style_kwargs=self.plot_kwargs)
-        best_score_metric.add_record(
-            self.problem.eval_count, self.best_solution.score)
+        best_score_metric = Metric(
+            name="score_history",
+            x_label="evaluations",
+            y_label="best_score",
+            style_kwargs=self.plot_kwargs,
+        )
+        best_score_metric.add_record(self.problem.eval_count, self.best_solution.score)
 
         while self.problem.eval_count < n_evaluations:
 
-
-            next_generation = self.population[:self.elite_size]
+            next_generation = self.population[: self.elite_size]
             next_generation += self.breed(self.popsize - self.elite_size)
             self.population = next_generation
 
             self.rank()
             best_score_metric.add_record(
-                self.problem.eval_count, self.best_solution.score)
+                self.problem.eval_count, self.best_solution.score
+            )
             self.generation += 1
+            print(self.generation)
 
         print(f"{self} is Done in {self.generation} generations")
         return best_score_metric
@@ -68,14 +78,16 @@ class GeneticAlgorithm(Solver):
 
     def select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
         indexes = np.arange(0, len(self.population), dtype=np.int)
-        chances = np.arange(len(self.population), 0, -1, dtype=np.int) + smoothen_chances / (1 - smoothen_chances + 1e-9)
+        chances = np.arange(
+            len(self.population), 0, -1, dtype=np.int
+        ) + smoothen_chances / (1 - smoothen_chances + 1e-9)
         chances = chances / sum(chances)
         parent_indexes = np.random.choice(indexes, n, True, chances)
         parents = np.array(self.population)[parent_indexes]
 
         return parents
 
-    def breed(self, n: int, smoothen_chances = 0) -> List[Solution]:
+    def breed(self, n: int, smoothen_chances=0) -> List[Solution]:
 
         parents = self.select_parents(n, smoothen_chances)
         children: List[Solution] = []
@@ -97,6 +109,9 @@ class GeneticAlgorithm(Solver):
         # self.avg = None
 
     def __str__(self):
-        return f"{self.name} with mut_rate - {self._mutation_rate} & " \
-            f"pop_size - {self.popsize} & " \
-            f"elite - {self.elite_size}" + (" HEAVY" if self.heavy_tail_mutation else "")
+        return (
+            f"{self.name} with mut_rate - {self._mutation_rate} & "
+            f"pop_size - {self.popsize} & "
+            f"elite - {self.elite_size}"
+            + (" HEAVY" if self.heavy_tail_mutation else "")
+        )

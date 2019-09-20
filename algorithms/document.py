@@ -4,7 +4,7 @@ import datetime
 import os
 from config import root_dir
 from ilya_ezplot import Metric, plot_group
-from typing import Dict
+from typing import List
 
 
 class PlotProgress:
@@ -31,8 +31,8 @@ class PlotProgress:
             if not os.path.isdir(self.problem_path):
                 os.makedirs(self.problem_path)
 
-    def generate_report(self, metrics: Dict[str, Metric]):
-        """ plot multiple curves from the metrics dict [label , Metric]"""
+    def generate_report(self, metrics: List[Metric]):
+        """ plot multiple curves from the metrics list"""
         if self.solver:
             plot_group(
                 metrics,
