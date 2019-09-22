@@ -1,6 +1,6 @@
 from __future__ import annotations
 import abc
-from typing import List
+from typing import List, Dict, SupportsFloat
 
 
 class Problem(abc.ABC):
@@ -36,5 +36,5 @@ class Solution(abc.ABC):
     def crossover(self, other: Solution) -> List[Solution]:
         raise NotImplementedError()
 
-    def metrics(self):
+    def metrics(self) -> Dict[str, SupportsFloat]:
         return {}

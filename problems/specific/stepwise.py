@@ -5,7 +5,6 @@ from functools import lru_cache
 
 from problems.problem import Problem, Solution
 
-
 class StepProblem(Problem):
 
     def __init__(self, thresholds: List[float]):

@@ -5,23 +5,26 @@ from algorithms import GeneticAlgorithm
 
 
 
-expression = lambda x: x**3 + 2*x**2 - 15*x + 5
-
-# import math
-# expression = lambda x: math.sin(x)
+# expression = lambda x: x**3 + 2*x**2 - 15*x + 5
+#
+import math
+expression = lambda x: math.sin(x)
 
 problem = ExpressionMatchProblem(expression, -10, 10)
 solver = GeneticAlgorithm(problem, 15, 0.5, 2)
 # solver = HillClimber(problem, 0.5)
 # solver = RandomSearch(problem)
 
-progress_metric = solver.solve(10000)
+solver.solve(10000)
 answer : ExpressionMatchProblem.solution_cls  = solver.best_solution
 answer.tree.write_down()
 
 
 from ilya_ezplot import Metric, plot_group, ez_plot
-ez_plot(progress_metric)
+ez_plot(solver.best_score_metric)
+
+for m in solver.solution_metrics.values():
+    ez_plot(m)
 
 m = Metric(name="true")
 m.add_arrays(problem.X, problem.Y)

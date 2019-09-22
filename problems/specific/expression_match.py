@@ -12,6 +12,10 @@ from functools import lru_cache
 
 from expr_tree import ExpressionTree
 
+from util.timeout import timeout, UserTimeoutError
+
+import math
+
 
 class SinGpSolution(Solution):
     def __init__(self, problem, expr_tree: ExpressionTree):
@@ -20,21 +24,38 @@ class SinGpSolution(Solution):
         self.time = None
 
     @property
+    @timeout(0.1)
     def score(self):
-        return self.problem.evaluate(self)
+        try:
+            return self.problem.evaluate(self)
+        except UserTimeoutError:
+            return -math.inf
 
+    @timeout(0.1)
     def mutate(self, rate: float):
-        return SinGpSolution(self.problem, self.tree.mutate(rate))
+        try:
+            return SinGpSolution(self.problem, self.tree.mutate(rate))
+        except UserTimeoutError:
+            self.tree.penalty += 100
+            return self
 
+    @timeout(0.1)
     def crossover(self, other: SinGpSolution):
-        return [
-            SinGpSolution(self.problem, ExpressionTree.crossover(self.tree, other.tree))
-        ]
+        try:
+            return [
+                SinGpSolution(self.problem, ExpressionTree.crossover(self.tree, other.tree))
+            ]
+        except UserTimeoutError:
+            self.tree.penalty += 100
+            return [self]
+
 
     def metrics(self):
-        result = {"nodes": len(self.tree.nodes), "penalty": self.tree.penalty}
-        if self.time:
-            result["time"] = self.time
+        return {
+            "nodes": len(self.tree.nodes),
+            "penalty": self.tree.penalty,
+            "time": self.time or 0,
+        }
 
 
 class ExpressionMatchProblem(Problem):
@@ -71,7 +92,7 @@ class ExpressionMatchProblem(Problem):
         errors = self.Y - y_pred
         errors = errors ** 2
 
-        return -np.mean(np.log(errors)) - 0.001 * (len(s.tree.nodes) + s.tree.penalty)
+        return -np.mean(np.log(errors)) - 0.001 * ( abs(len(s.tree.nodes) - 10 ) + s.tree.penalty)
 
     def random_solution(self) -> Solution:
         depth = random.randint(2, 8)

@@ -33,7 +33,7 @@ class Solver(abc.ABC):
 
         solution_metric_dict = self.best_solution.metrics()
 
-        for k, v in solution_metric_dict:
+        for k, v in solution_metric_dict.items():
             self.solution_metrics[k].add_record(self.problem.eval_count, v)
 
     @abc.abstractmethod
