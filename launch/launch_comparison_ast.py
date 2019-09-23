@@ -1,8 +1,7 @@
-from algorithms import HillClimber
-from algorithms.document import PlotProgress
-from algorithms import RandomSearch
-from algorithms import GeneticAlgorithm
-from algorithms.solver import Solver
+from blackbox.algorithms import HillClimber
+from util.document import PlotProgress
+from blackbox.algorithms import RandomSearch
+from blackbox.algorithms import GeneticAlgorithm
 from problems import ExpressionMatchProblem
 import pathos
 

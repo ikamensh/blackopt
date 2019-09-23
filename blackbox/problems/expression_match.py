@@ -12,7 +12,7 @@ from functools import lru_cache
 
 from expr_tree import ExpressionTree
 
-from util.timeout import timeout, UserTimeoutError
+from blackbox.util.timeout import timeout, UserTimeoutError
 
 import math
 

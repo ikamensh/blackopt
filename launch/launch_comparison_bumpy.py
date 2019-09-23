@@ -1,8 +1,8 @@
-from algorithms import HillClimber
+from blackbox.algorithms import HillClimber
 from problems import BumpyProblem
-from algorithms.document import PlotProgress
-from algorithms import RandomSearch
-from algorithms.solver import Solver
+from blackbox.util.document import PlotProgress
+from blackbox.algorithms import RandomSearch
+from blackbox.abc.solver import Solver
 from concurrent import futures
 
 

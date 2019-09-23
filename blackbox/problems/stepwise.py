@@ -1,12 +1,11 @@
 from __future__ import annotations
 from typing import List
 import random
-from functools import lru_cache
 
-from problems.problem import Problem, Solution
+from blackbox.abc import Problem, Solution
+
 
 class StepProblem(Problem):
-
     def __init__(self, thresholds: List[float]):
         self.n_dim = len(thresholds)
         self.thresholds = thresholds
@@ -29,27 +28,22 @@ class StepProblem(Problem):
 
         return result
 
-    @lru_cache(maxsize=int(2**16))
     def evaluate(self, s: StepSolution) -> int:
         self.eval_count += 1
         return self._step_function(s.genes, self.thresholds)
-
-    def random_solution(self) -> Solution:
-        values = [random.random() for i in range(self.n_dim)]
-        return StepSolution(self, values)
 
     def __str__(self):
         return f"{self.__class__.__name__} {self.n_dim}"
 
 
 class StepSolution(Solution):
-    def __init__(self, problem, values):
-        self.problem = problem
+    def __init__(self, values):
         self.genes = values
 
-    @property
-    def score(self):
-        return self.problem.evaluate(self)
+    @staticmethod
+    def random_solution() -> Solution:
+        values = [random.random() for i in range(StepSolution.problem.n_dim)]
+        return StepSolution(values)
 
     def mutate(self, rate: float):
         new_values = []
@@ -59,7 +53,7 @@ class StepSolution(Solution):
             else:
                 new_values.append(v)
 
-        return StepSolution(self.problem, new_values)
+        return StepSolution(new_values)
 
     def crossover(self, other: StepSolution):
         crossover_point = random.randint(1, len(self.genes) - 1)
@@ -67,7 +61,4 @@ class StepSolution(Solution):
         child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
         child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
 
-        return [
-            StepSolution(
-                self.problem, child_a), StepSolution(
-                self.problem, child_b)]
+        return [StepSolution(child_a), StepSolution(child_b)]

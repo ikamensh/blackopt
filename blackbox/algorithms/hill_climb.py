@@ -1,16 +1,16 @@
-from problems.problem import Problem, Solution
-from algorithms.solver import Solver
+from blackbox.abc import Solver, Problem
+from typing import ClassVar
 
 
 class HillClimber(Solver):
     name = "hill climb"
 
-    def __init__(self, problem: Problem, mutation_rate):
-
-        super().__init__(problem)
-        self.mutation_rate = mutation_rate
+    def __init__(self, problem: Problem, solution_cls: ClassVar, *, mutation_rate):
 
         assert 0 < mutation_rate <= 1
+        super().__init__(problem, solution_cls)
+        self.mutation_rate = mutation_rate
+
 
     def solve(self, n_evaluations):
 

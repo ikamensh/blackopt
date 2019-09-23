@@ -1,6 +1,6 @@
 import abc
-from typing import Dict
-from problems.problem import Problem, Solution
+from typing import Dict, ClassVar
+from blackbox.abc import Problem, Solution
 from ilya_ezplot import Metric
 
 
@@ -8,7 +8,13 @@ class Solver(abc.ABC):
     name: str = None
     best_solution: Solution = None
 
-    def __init__(self, problem: Problem, plot_kwargs: Dict = None):
+    def __init__(
+        self,
+        problem: Problem,
+        solution_cls: ClassVar[Solution],
+        plot_kwargs: Dict = None,
+    ):
+        problem.eval_count = 0
         self.problem = problem
         self.best_score_metric = Metric(
             name=self.name,
@@ -16,7 +22,10 @@ class Solver(abc.ABC):
             y_label="best_score",
             style_kwargs=plot_kwargs or {},
         )
-        self.best_solution: Solution = problem.random_solution()
+
+        solution_cls.problem = problem
+        self.solution_cls = solution_cls
+        self.best_solution: Solution = self.solution_cls.random_solution()
 
         solution_metric_dict = self.best_solution.metrics()
         self.solution_metrics = {
@@ -39,10 +48,6 @@ class Solver(abc.ABC):
     @abc.abstractmethod
     def solve(self, *args, **kwargs):
         raise NotImplementedError()
-
-    def reset(self):
-        self.best_solution: Solution = self.problem.random_solution()
-        self.problem.eval_count = 0
 
     def __str__(self):
         return str(self.name)

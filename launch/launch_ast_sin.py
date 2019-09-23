@@ -1,7 +1,5 @@
 from problems import ExpressionMatchProblem
-from algorithms import RandomSearch
-from algorithms import HillClimber
-from algorithms import GeneticAlgorithm
+from blackbox.algorithms import GeneticAlgorithm
 
 
 

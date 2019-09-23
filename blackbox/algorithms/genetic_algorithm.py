@@ -1,5 +1,5 @@
-from problems.problem import Problem, Solution
-from algorithms.solver import Solver
+from blackbox.abc import Problem, Solution
+from blackbox.abc.solver import Solver
 import numpy as np
 from typing import List, Dict
 import random
@@ -11,6 +11,7 @@ class GeneticAlgorithm(Solver):
     def __init__(
         self,
         problem: Problem,
+        solution_cls,
         popsize: int,
         mutation_rate: float,
         elite_size: int,
@@ -23,17 +24,17 @@ class GeneticAlgorithm(Solver):
         assert popsize > elite_size
         assert isinstance(elite_size, int)
 
-        super().__init__(problem, plot_kwargs)
+        super().__init__(problem, solution_cls, plot_kwargs)
 
         self.heavy_tail_mutation = heavy_tail_mutation
         self._mutation_rate = mutation_rate
         self.popsize = popsize
         self.elite_size = elite_size
-        self.population = [problem.random_solution() for _ in range(popsize)]
+        self.population = [solution_cls.random_solution() for _ in range(popsize)]
 
         self.generation = 1
         self.avg = None
-        self.rank()
+        self._rank()
 
     @property
     def mutation_rate(self):
@@ -49,22 +50,22 @@ class GeneticAlgorithm(Solver):
         while self.problem.eval_count < n_evaluations:
 
             next_generation = self.population[: self.elite_size]
-            next_generation += self.breed(self.popsize - self.elite_size)
+            next_generation += self._breed(self.popsize - self.elite_size)
             self.population = next_generation
 
-            self.rank()
+            self._rank()
             self.record()
             self.generation += 1
             print(self.generation)
 
         print(f"{self} is Done in {self.generation} generations")
 
-    def rank(self):
+    def _rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)
         self.best_solution: Solution = max(self.population, key=lambda x: x.score)
         # self.avg = sum([x.score for x in self.population]) / len(self.population)
 
-    def select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
+    def _select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
         indexes = np.arange(0, len(self.population), dtype=np.int)
         chances = np.arange(
             len(self.population), 0, -1, dtype=np.int
@@ -75,9 +76,9 @@ class GeneticAlgorithm(Solver):
 
         return parents
 
-    def breed(self, n: int, smoothen_chances=0) -> List[Solution]:
+    def _breed(self, n: int, smoothen_chances=0) -> List[Solution]:
 
-        parents = self.select_parents(n, smoothen_chances)
+        parents = self._select_parents(n, smoothen_chances)
         children: List[Solution] = []
 
         for i in range(n):
@@ -88,13 +89,6 @@ class GeneticAlgorithm(Solver):
         children = [child.mutate(self.mutation_rate) for child in children]
 
         return children
-
-    def reset(self):
-        self.population = [self.problem.random_solution() for _ in range(self.popsize)]
-        self.generation = 1
-        self.problem.eval_count = 0
-        self.rank()
-        # self.avg = None
 
     def __str__(self):
         return (

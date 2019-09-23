@@ -1,8 +1,8 @@
 from problems import TspProblem
-from algorithms.document import PlotProgress
-from algorithms import RandomSearch
-from algorithms import GeneticAlgorithm
-from algorithms.solver import Solver
+from blackbox.util.document import PlotProgress
+from blackbox.algorithms import RandomSearch
+from blackbox.algorithms import GeneticAlgorithm
+from blackbox.abc.solver import Solver
 from concurrent import futures
 
 
