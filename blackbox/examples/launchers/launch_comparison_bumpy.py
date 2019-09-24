@@ -1,6 +1,6 @@
 from __future__ import annotations
 from blackbox.algorithms import HillClimber
-from examples.problems import BumpyProblem, BumpySolution
+from blackbox.examples.problems import BumpyProblem, BumpySolution
 from blackbox.algorithms import RandomSearch
 from blackbox.compare import compare_solvers, SolverFactory
 from blackbox.util.document import generate_report

@@ -4,7 +4,7 @@ import random
 import math
 
 from blackbox.abc import Problem, Solution
-from examples.problems.tsp.city import City
+from blackbox.examples.problems.tsp.city import City
 
 
 class TspProblem(Problem):

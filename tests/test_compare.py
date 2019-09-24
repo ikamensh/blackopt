@@ -1,5 +1,5 @@
 from blackbox.algorithms import HillClimber, GeneticAlgorithm
-from examples.problems import StepProblem, StepSolution
+from blackbox.examples.problems import StepProblem, StepSolution
 from blackbox.algorithms import RandomSearch
 
 from blackbox.compare import compare_solvers, SolverFactory

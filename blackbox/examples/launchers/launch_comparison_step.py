@@ -1,5 +1,5 @@
 from blackbox.algorithms import HillClimber, GeneticAlgorithm
-from examples.problems import StepProblem, StepSolution
+from blackbox.examples.problems import StepProblem, StepSolution
 from blackbox.algorithms import RandomSearch
 from blackbox.util.document import generate_report
 
@@ -10,7 +10,7 @@ problems = [StepProblem.random_problem(n) for n in [250, 1000, 3000]]
 
 sfs = []
 
-n_steps = 50_000
+n_steps = 50_0
 trials = 10
 
 for problem in problems:

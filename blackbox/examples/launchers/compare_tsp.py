@@ -1,4 +1,4 @@
-from examples.problems import TspProblem, TspSolution
+from blackbox.examples.problems import TspProblem, TspSolution
 from blackbox.algorithms import RandomSearch
 from blackbox.algorithms import GeneticAlgorithm
 from blackbox.util.document import generate_report
