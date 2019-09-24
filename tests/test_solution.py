@@ -1,4 +1,4 @@
-from blackbox.abc import Solution
+from blackopt.abc import Solution
 from typing import List
 import random
 import copy

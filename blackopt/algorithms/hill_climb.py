@@ -1,4 +1,4 @@
-from blackbox.abc import Solver, Problem
+from blackopt.abc import Solver, Problem
 from typing import ClassVar
 
 

@@ -3,7 +3,7 @@ from typing import List
 import random
 from functools import lru_cache
 
-from blackbox.abc import Problem, Solution
+from blackopt.abc import Problem, Solution
 
 import math
 from collections import namedtuple

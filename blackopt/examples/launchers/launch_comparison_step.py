@@ -1,9 +1,9 @@
-from blackbox.algorithms import HillClimber, GeneticAlgorithm
-from blackbox.examples.problems import StepProblem, StepSolution
-from blackbox.algorithms import RandomSearch
-from blackbox.util.document import generate_report
+from blackopt.algorithms import HillClimber, GeneticAlgorithm
+from blackopt.examples.problems import StepProblem, StepSolution
+from blackopt.algorithms import RandomSearch
+from blackopt.util.document import generate_report
 
-from blackbox.compare import compare_solvers, SolverFactory
+from blackopt.compare import compare_solvers, SolverFactory
 
 
 problems = [StepProblem.random_problem(n) for n in [250, 1000, 3000]]

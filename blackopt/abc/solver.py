@@ -1,6 +1,6 @@
 import abc
 from typing import Dict, ClassVar
-from blackbox.abc import Problem, Solution
+from blackopt.abc import Problem, Solution
 from ilya_ezplot import Metric
 
 

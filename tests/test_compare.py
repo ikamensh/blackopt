@@ -1,8 +1,8 @@
-from blackbox.algorithms import HillClimber, GeneticAlgorithm
-from blackbox.examples.problems import StepProblem, StepSolution
-from blackbox.algorithms import RandomSearch
+from blackopt.algorithms import HillClimber, GeneticAlgorithm
+from blackopt.examples.problems import StepProblem, StepSolution
+from blackopt.algorithms import RandomSearch
 
-from blackbox.compare import compare_solvers, SolverFactory
+from blackopt.compare import compare_solvers, SolverFactory
 from ilya_ezplot import Metric
 
 def test_compare():

@@ -5,7 +5,7 @@ from collections import defaultdict
 import pathos
 
 if TYPE_CHECKING:
-    from blackbox.abc import Solver
+    from blackopt.abc import Solver
     from ilya_ezplot import Metric
 
 

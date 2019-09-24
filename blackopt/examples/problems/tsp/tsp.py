@@ -3,8 +3,8 @@ from typing import List
 import random
 import math
 
-from blackbox.abc import Problem, Solution
-from blackbox.examples.problems.tsp.city import City
+from blackopt.abc import Problem, Solution
+from blackopt.examples.problems.tsp.city import City
 
 
 class TspProblem(Problem):

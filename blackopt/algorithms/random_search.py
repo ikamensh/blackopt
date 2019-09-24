@@ -1,4 +1,4 @@
-from blackbox.abc.solver import Solver
+from blackopt.abc.solver import Solver
 
 class RandomSearch(Solver):
     name = "random search"

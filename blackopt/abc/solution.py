@@ -3,7 +3,7 @@ import abc
 from typing import TYPE_CHECKING, List, Dict, SupportsFloat
 
 if TYPE_CHECKING:
-    from blackbox.abc import Problem
+    from blackopt.abc import Problem
 
 
 class Solution(abc.ABC):

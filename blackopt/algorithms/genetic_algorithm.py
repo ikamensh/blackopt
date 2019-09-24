@@ -1,5 +1,5 @@
-from blackbox.abc import Problem, Solution
-from blackbox.abc.solver import Solver
+from blackopt.abc import Problem, Solution
+from blackopt.abc.solver import Solver
 import numpy as np
 from typing import List, Dict
 

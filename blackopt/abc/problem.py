@@ -2,7 +2,7 @@ from __future__ import annotations
 import abc
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from blackbox.abc import Solution
+    from blackopt.abc import Solution
 
 
 class Problem(abc.ABC):

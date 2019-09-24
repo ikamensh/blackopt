@@ -1,9 +1,9 @@
 from __future__ import annotations
-from blackbox.algorithms import HillClimber
-from blackbox.examples.problems import BumpyProblem, BumpySolution
-from blackbox.algorithms import RandomSearch
-from blackbox.compare import compare_solvers, SolverFactory
-from blackbox.util.document import generate_report
+from blackopt.algorithms import HillClimber
+from blackopt.examples.problems import BumpyProblem, BumpySolution
+from blackopt.algorithms import RandomSearch
+from blackopt.compare import compare_solvers, SolverFactory
+from blackopt.util.document import generate_report
 
 
 problem = BumpyProblem.random_problem(100, 200)

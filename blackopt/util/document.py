@@ -4,7 +4,7 @@ from typing import List
 
 from ilya_ezplot import Metric, plot_group
 
-from blackbox.abc import Problem
+from blackopt.abc import Problem
 
 
 def generate_report(problem: Problem, metrics: List[Metric], root_dir = None):

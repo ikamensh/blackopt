@@ -1,4 +1,4 @@
-from blackbox.abc import Solution, Problem
+from blackopt.abc import Solution, Problem
 import random
 
 class EasyProblem(Problem):

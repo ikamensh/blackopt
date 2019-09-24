@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import List
 import random
 
-from blackbox.abc import Problem, Solution
+from blackopt.abc import Problem, Solution
 
 
 class StepProblem(Problem):

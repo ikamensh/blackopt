@@ -1,10 +1,10 @@
-from blackbox.examples.problems import TspProblem, TspSolution
-from blackbox.algorithms import RandomSearch
-from blackbox.algorithms import GeneticAlgorithm
-from blackbox.util.document import generate_report
+from blackopt.examples.problems import TspProblem, TspSolution
+from blackopt.algorithms import RandomSearch
+from blackopt.algorithms import GeneticAlgorithm
+from blackopt.util.document import generate_report
 
 
-from blackbox.compare import compare_solvers, SolverFactory
+from blackopt.compare import compare_solvers, SolverFactory
 
 n_steps = int(2e3)
 n_trials = 3

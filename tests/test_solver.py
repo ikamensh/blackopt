@@ -1,4 +1,4 @@
-from blackbox.abc import Solver
+from blackopt.abc import Solver
 from typing import List, SupportsFloat
 import random
 import copy
@@ -7,7 +7,7 @@ from tests.test_problem import EasyProblem
 from tests.test_solution import EasySolution
 
 
-from blackbox.algorithms import RandomSearch
+from blackopt.algorithms import RandomSearch
 
 def test_random_search():
     rs = RandomSearch(EasyProblem(), EasySolution)
