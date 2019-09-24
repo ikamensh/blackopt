@@ -1,3 +1,4 @@
+from __future__ import annotations
 import numpy as np
 from functools import lru_cache
 
@@ -16,7 +17,7 @@ class City:
         self.coordinates = np.random.random(size=[ndim])
 
     @lru_cache(maxsize=int(2**20))
-    def distance(self, city):
+    def distance(self, city: City):
         return np.linalg.norm(self.coordinates - city.coordinates)
 
     def __eq__(self, other):

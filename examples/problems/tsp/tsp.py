@@ -1,12 +1,10 @@
 from __future__ import annotations
 from typing import List
 import random
-from functools import lru_cache
-
-from problems.problem import Problem, Solution
-
-from problems.specific.tsp.city import City
 import math
+
+from blackbox.abc import Problem, Solution
+from examples.problems.tsp.city import City
 
 
 class TspProblem(Problem):
@@ -23,12 +21,6 @@ class TspProblem(Problem):
         cities = [City(n_dim) for _ in range(cities)]
         return TspProblem(cities)
 
-    def random_solution(self) -> TspSolution:
-        cpy = list(self.cities)
-        random.shuffle(cpy)
-        return TspSolution(self, cpy)
-
-    @lru_cache(maxsize=int(2**16))
     def evaluate(self, s: TspSolution):
         self.eval_count += 1
         return self.max_dist - self.route_distance(s.route)
@@ -46,11 +38,15 @@ class TspProblem(Problem):
 
 
 class TspSolution(Solution):
-
-    def __init__(self, problem: TspProblem, route: List[City]):
-        self.problem: TspProblem = problem
+    def __init__(self, route: List[City]):
         self.route = route
-        assert set(route) == set(problem.cities)
+        assert set(route) == set(self.problem.cities)
+
+    @staticmethod
+    def random_solution() -> TspSolution:
+        cpy = list(TspSolution.problem.cities)
+        random.shuffle(cpy)
+        return TspSolution(cpy)
 
     @property
     def score(self):
@@ -64,7 +60,7 @@ class TspSolution(Solution):
                 j = int(random.random() * len(route))
                 route[i], route[j] = route[j], route[i]
 
-        return TspSolution(self.problem, route)
+        return TspSolution(route)
 
     def crossover(self, other: TspSolution):
         crossover_point = random.randint(1, len(self.route) - 1)
@@ -73,4 +69,4 @@ class TspSolution(Solution):
         check = {city.uid for city in child_left}
         child_right = [city for city in other.route if city.uid not in check]
 
-        return [TspSolution(self.problem, child_left + child_right)]
+        return [TspSolution(child_left + child_right)]

@@ -2,7 +2,6 @@ from blackbox.abc import Problem, Solution
 from blackbox.abc.solver import Solver
 import numpy as np
 from typing import List, Dict
-import random
 
 
 class GeneticAlgorithm(Solver):
@@ -15,7 +14,6 @@ class GeneticAlgorithm(Solver):
         popsize: int,
         mutation_rate: float,
         elite_size: int,
-        heavy_tail_mutation=False,
         plot_kwargs: Dict = None,
     ):
 
@@ -24,28 +22,18 @@ class GeneticAlgorithm(Solver):
         assert popsize > elite_size
         assert isinstance(elite_size, int)
 
-        super().__init__(problem, solution_cls, plot_kwargs)
-
-        self.heavy_tail_mutation = heavy_tail_mutation
-        self._mutation_rate = mutation_rate
+        self.mutation_rate = mutation_rate
         self.popsize = popsize
         self.elite_size = elite_size
-        self.population = [solution_cls.random_solution() for _ in range(popsize)]
 
+        super().__init__(problem, solution_cls, plot_kwargs)
+
+        self.population = [solution_cls.random_solution() for _ in range(popsize)]
         self.generation = 1
         self.avg = None
         self._rank()
 
-    @property
-    def mutation_rate(self):
-        if self.heavy_tail_mutation:
-            lambd = 1 / self._mutation_rate
-            return random.expovariate(lambd)
-        else:
-            return self._mutation_rate
-
     def solve(self, n_evaluations):
-
 
         while self.problem.eval_count < n_evaluations:
 
@@ -92,8 +80,7 @@ class GeneticAlgorithm(Solver):
 
     def __str__(self):
         return (
-            f"{self.name} with mut_rate - {self._mutation_rate} & "
+            f"{self.name} with mut_rate - {self.mutation_rate} & "
             f"pop_size - {self.popsize} & "
             f"elite - {self.elite_size}"
-            + (" HEAVY" if self.heavy_tail_mutation else "")
         )

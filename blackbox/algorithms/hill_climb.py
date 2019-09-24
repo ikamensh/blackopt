@@ -8,8 +8,8 @@ class HillClimber(Solver):
     def __init__(self, problem: Problem, solution_cls: ClassVar, *, mutation_rate):
 
         assert 0 < mutation_rate <= 1
-        super().__init__(problem, solution_cls)
         self.mutation_rate = mutation_rate
+        super().__init__(problem, solution_cls)
 
 
     def solve(self, n_evaluations):

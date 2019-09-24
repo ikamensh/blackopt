@@ -17,7 +17,7 @@ class Solver(abc.ABC):
         problem.eval_count = 0
         self.problem = problem
         self.best_score_metric = Metric(
-            name=self.name,
+            name=str(self),
             x_label="evaluations",
             y_label="best_score",
             style_kwargs=plot_kwargs or {},
@@ -46,7 +46,7 @@ class Solver(abc.ABC):
             self.solution_metrics[k].add_record(self.problem.eval_count, v)
 
     @abc.abstractmethod
-    def solve(self, *args, **kwargs):
+    def solve(self, steps):
         raise NotImplementedError()
 
     def __str__(self):
