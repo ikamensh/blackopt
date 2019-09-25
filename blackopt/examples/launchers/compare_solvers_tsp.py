@@ -16,16 +16,16 @@ solvers = []
 solvers.append(SolverFactory(RandomSearch, problem, TspSolution))
 solvers.append(SolverFactory(HillClimber, problem, TspSolution, 2 / cities))
 solvers.append(
-    SolverFactory(GeneticAlgorithmInject, problem, TspSolution, 50, 1 / cities, 1, 20)
+    SolverFactory(GeneticAlgorithmInject, problem, TspSolution, 50, 2 / cities, 1, 20)
 )
 solvers.append(
-    SolverFactory(GeneticAlgorithmInject, problem, TspSolution, 10, 1 / cities, 1, 20)
+    SolverFactory(GeneticAlgorithmInject, problem, TspSolution, 10, 2 / cities, 1, 20)
 )
 solvers.append(
-    SolverFactory(GeneticAlgorithm, problem, TspSolution, 50, 1 / cities, 1)
+    SolverFactory(GeneticAlgorithm, problem, TspSolution, 50, 2 / cities, 1)
 )
 solvers.append(
-    SolverFactory(GeneticAlgorithm, problem, TspSolution, 10, 1 / cities, 1)
+    SolverFactory(GeneticAlgorithm, problem, TspSolution, 10, 2 / cities, 1)
 )
 
 if __name__ == "__main__":
