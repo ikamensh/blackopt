@@ -5,7 +5,7 @@ from typing import ClassVar
 class HillClimber(Solver):
     name = "hill climb"
 
-    def __init__(self, problem: Problem, solution_cls: ClassVar, *, mutation_rate):
+    def __init__(self, problem: Problem, solution_cls: ClassVar, mutation_rate):
 
         assert 0 < mutation_rate <= 1
         self.mutation_rate = mutation_rate
