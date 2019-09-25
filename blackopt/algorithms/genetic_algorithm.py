@@ -54,7 +54,7 @@ class GeneticAlgorithm(Solver):
 
     def _rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)
-        self.best_solution: Solution = max(self.population, key=lambda x: x.score)
+        self.best_solution: Solution = max(self.population + [self.best_solution], key=lambda x: x.score)
 
     def record(self):
         super().record()

@@ -1,11 +1,24 @@
 from blackopt.examples.problems import TspSolution, TspProblem
+from blackopt.examples.problems import BumpySolution, BumpyProblem
+from blackopt.examples.problems import StepSolution, StepProblem
 
-def test_eval_count():
+import pytest
 
-    prob = TspProblem.random_problem(5, 10)
 
-    TspSolution.problem = prob
-    sol = TspSolution.random_solution()
+@pytest.mark.parametrize(
+    ("prob_cls", "prob_args", "sol_cls"),
+    [
+        (TspProblem, [5, 10], TspSolution),
+        (BumpyProblem, [5, 10], BumpySolution),
+        (StepProblem, [100], StepSolution),
+    ],
+)
+def test_eval_count(prob_cls, prob_args, sol_cls):
+
+    prob = prob_cls.random_problem(*prob_args)
+
+    sol_cls.problem = prob
+    sol = sol_cls.random_solution()
 
     score = sol.score
     score2 = sol.score
