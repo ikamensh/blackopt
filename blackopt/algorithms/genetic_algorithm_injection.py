@@ -105,7 +105,8 @@ class GeneticAlgorithmInject(Solver):
 
     def __str__(self):
         return (
-            f"{self.name} with mut_rate - {self.mutation_rate} & "
-            f"pop_size - {self.popsize} & "
+            f"{self.name} with mut - {self.mutation_rate} & "
+            f"pop - {self.popsize} & "
             f"elite - {self.elite_size}"
+            f"inj - {self.inject_quality}"
         )
