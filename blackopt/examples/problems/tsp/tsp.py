@@ -48,10 +48,6 @@ class TspSolution(Solution):
         random.shuffle(cpy)
         return TspSolution(cpy)
 
-    @property
-    def score(self):
-        return self.problem.evaluate(self)
-
     def mutate(self, mutationRate: float) -> TspSolution:
         route = list(self.route)
 
