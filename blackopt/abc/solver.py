@@ -1,49 +1,43 @@
 import abc
-from typing import Dict, ClassVar
-from blackopt.abc import Problem, Solution
+from typing import ClassVar, Dict, DefaultDict, SupportsFloat
+from collections import defaultdict
+
 from ilya_ezplot import Metric
+
+from blackopt.abc import Problem, Solution
+
+
+class keydefaultdict(defaultdict):
+    def __missing__(self, key):
+        if self.default_factory is None:
+            raise KeyError(key)
+        else:
+            ret = self[key] = self.default_factory(key)
+            return ret
 
 
 class Solver(abc.ABC):
     name: str = None
     best_solution: Solution = None
 
-    def __init__(
-        self,
-        problem: Problem,
-        solution_cls: ClassVar[Solution],
-        plot_kwargs: Dict = None,
-    ):
+    def __init__(self, problem: Problem, solution_cls: ClassVar[Solution]):
         problem.eval_count = 0
         self.problem = problem
-        self.best_score_metric = Metric(
-            name=str(self),
-            x_label="evaluations",
-            y_label="best_score",
-            style_kwargs=plot_kwargs or {},
-        )
-
         solution_cls.problem = problem
         self.solution_cls = solution_cls
         self.best_solution: Solution = self.solution_cls.random_solution()
-
-        solution_metric_dict = self.best_solution.metrics()
-        self.solution_metrics = {
-            k: Metric(name=k, x_label="evaluations")
-            for k in solution_metric_dict.keys()
-        }
-
+        self.metrics: DefaultDict[str, Metric] = keydefaultdict(
+            lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
+        )
         self.record()
 
     def record(self):
-        self.best_score_metric.add_record(
-            self.problem.eval_count, self.best_solution.score
-        )
-
         solution_metric_dict = self.best_solution.metrics()
-
         for k, v in solution_metric_dict.items():
-            self.solution_metrics[k].add_record(self.problem.eval_count, v)
+            self.record_metric(f"best_{k}", v)
+
+    def record_metric(self, name:str, val:SupportsFloat):
+        self.metrics[name].add_record(self.problem.eval_count, val)
 
     @abc.abstractmethod
     def solve(self, steps):

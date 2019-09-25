@@ -17,7 +17,9 @@ def test_compare():
         sfs += [SolverFactory(GeneticAlgorithm, problem, StepSolution, 10, 1/problem.n_dim, 1)]
         sfs += [SolverFactory(HillClimber,problem, StepSolution, mutation_rate=2/problem.n_dim)]
         sfs.append(SolverFactory(RandomSearch, problem, StepSolution))
-
+        
         ms = compare_solvers(trials, n_steps, sfs)
-        assert isinstance(ms[0], Metric)
-        assert len(ms[0].data) > 2
+        
+        for sf, m_dict in zip(sfs, ms):
+            assert isinstance(m_dict['score'], Metric)
+            assert len(m_dict['score'].data) > 2

@@ -20,13 +20,12 @@ for problem in problems:
     solvers = []
     solvers.append(SolverFactory(RandomSearch, problem, TspSolution))
     for popsize in [10, 50]:
-        for elite_size, color in zip({1, popsize // 10}, ["purple", "teal", "brown"]):
-            for mr, linewidth in zip([5e-4, 5e-3, 0.01], [0.5, 1.1, 1.8]):
-                style = {}
+        for elite_size in [1, popsize // 10]:
+            for mr in [5e-4, 5e-3, 0.01]:
                 # if heavy:
                 #     style["dashes"] = [2, 2, 10, 2]
-                style["linewidth"] = linewidth
-                style["color"] = color
+                # style["linewidth"] = linewidth
+                # style["color"] = color
                 ga = SolverFactory(
                     GeneticAlgorithm,
                     problem,
@@ -34,7 +33,6 @@ for problem in problems:
                     popsize,
                     mr,
                     elite_size,
-                    plot_kwargs=style,
                 )
                 solvers.append(ga)
 

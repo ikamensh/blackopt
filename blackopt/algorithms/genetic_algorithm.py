@@ -1,7 +1,7 @@
 from blackopt.abc import Problem, Solution
 from blackopt.abc.solver import Solver
 import numpy as np
-from typing import List, Dict
+from typing import List
 
 
 class GeneticAlgorithm(Solver):
@@ -14,7 +14,6 @@ class GeneticAlgorithm(Solver):
         popsize: int,
         mutation_rate: float,
         elite_size: int,
-        plot_kwargs: Dict = None,
     ):
 
         assert 0 < mutation_rate <= 1
@@ -26,7 +25,7 @@ class GeneticAlgorithm(Solver):
         self.popsize = popsize
         self.elite_size = elite_size
 
-        super().__init__(problem, solution_cls, plot_kwargs)
+        super().__init__(problem, solution_cls)
 
         self.population = [solution_cls.random_solution() for _ in range(popsize)]
         self.generation = 1
@@ -51,7 +50,13 @@ class GeneticAlgorithm(Solver):
     def _rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)
         self.best_solution: Solution = max(self.population, key=lambda x: x.score)
-        # self.avg = sum([x.score for x in self.population]) / len(self.population)
+
+    def record(self):
+        super().record()
+        self.record_metric(
+            "average_score",
+            sum([x.score for x in self.population]) / len(self.population),
+        )
 
     def _select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
         indexes = np.arange(0, len(self.population), dtype=np.int)

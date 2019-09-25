@@ -10,7 +10,16 @@ def get_requirements():
 
 setup(
     name="blackopt",
-    packages=["blackopt", "blackopt.abc", "blackopt.algorithms", "blackopt.examples", "blackopt.util", "blackopt.examples",],
+    packages=[
+        "blackopt",
+        "blackopt.abc",
+        "blackopt.algorithms",
+        "blackopt.examples",
+        "blackopt.examples.launchers",
+        "blackopt.examples.problems",
+        "blackopt.examples.problems.tsp",
+        "blackopt.util",
+    ],
     # package_dir={"": "."},
     version=version,
     description="black box optimization",

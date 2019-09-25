@@ -10,7 +10,7 @@ problems = [StepProblem.random_problem(n) for n in [250, 1000, 3000]]
 
 sfs = []
 
-n_steps = 50_0
+n_steps = 500
 trials = 10
 
 for problem in problems:

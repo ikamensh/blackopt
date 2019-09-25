@@ -30,4 +30,4 @@ class Solution(abc.ABC):
         return self._score
 
     def metrics(self) -> Dict[str, SupportsFloat]:
-        return {}
+        return {"score": self.score}
