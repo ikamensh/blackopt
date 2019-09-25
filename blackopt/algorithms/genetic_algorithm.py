@@ -47,7 +47,7 @@ class GeneticAlgorithm(Solver):
             self._rank()
             self.record()
             self.generation += 1
-            print(self.generation)
+            print("Generation", self.generation, self.problem.eval_count)
 
         print(f"{self} is Done in {self.generation} generations")
 
