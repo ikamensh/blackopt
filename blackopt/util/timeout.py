@@ -16,9 +16,9 @@ def timeout(t):
                 result = f(*args, **kwargs)
             finally:
                 # reinstall the old signal handler
-                signal.signal(signal.SIGALRM, old)
-                # cancel the alarm
                 signal.setitimer(signal.ITIMER_REAL, 0)
+                # cancel the alarm
+                signal.signal(signal.SIGALRM, old)
             return result
         return new_f
     return decorate
