@@ -20,6 +20,6 @@ def test_compare():
         
         ms = compare_solvers(trials, n_steps, sfs)
         
-        for sf, m_dict in zip(sfs, ms):
-            assert isinstance(m_dict['score'], Metric)
-            assert len(m_dict['score'].data) > 2
+        for sf, m_dict in ms.items():
+            assert isinstance(m_dict['best_score'], Metric)
+            assert len(m_dict['best_score'].data) > 2

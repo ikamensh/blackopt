@@ -1,7 +1,11 @@
+from collections import defaultdict
+from typing import List
+
+import numpy as np
+
 from blackopt.abc import Problem, Solution
 from blackopt.abc.solver import Solver
-import numpy as np
-from typing import List
+
 
 
 class GeneticAlgorithm(Solver):
@@ -27,7 +31,7 @@ class GeneticAlgorithm(Solver):
 
         super().__init__(problem, solution_cls)
 
-        self.population = [solution_cls.random_solution() for _ in range(popsize)]
+        self.population: List[Solution] = [solution_cls.random_solution() for _ in range(popsize)]
         self.generation = 1
         self.avg = None
         self._rank()
@@ -53,10 +57,16 @@ class GeneticAlgorithm(Solver):
 
     def record(self):
         super().record()
-        self.record_metric(
-            "average_score",
-            sum([x.score for x in self.population]) / len(self.population),
-        )
+        aggr = defaultdict(list)
+        for p in self.population:
+            ms = p.metrics()
+            for k, v in ms.items():
+                aggr[k].append(v)
+        for k, lst in aggr.items():
+            self.record_metric(
+                f"average_{k}",
+                sum(lst) / self.popsize,
+            )
 
     def _select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
         indexes = np.arange(0, len(self.population), dtype=np.int)

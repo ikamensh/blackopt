@@ -29,7 +29,6 @@ class Solver(abc.ABC):
         self.metrics: DefaultDict[str, Metric] = keydefaultdict(
             lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
         )
-        self.record()
 
     def record(self):
         solution_metric_dict = self.best_solution.metrics()
