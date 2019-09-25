@@ -6,8 +6,8 @@ from blackopt.util.document import generate_report
 
 from blackopt.compare import compare_solvers, SolverFactory
 
-n_steps = int(2e6)
-n_trials = 8
+n_steps = int(2e4)
+n_trials = 4
 
 cities = 200
 problem = TspProblem.random_problem(15, cities)

@@ -53,7 +53,7 @@ class TspSolution(Solution):
         return self.problem.evaluate(self)
 
     def mutate(self, mutationRate: float) -> TspSolution:
-        route = self.route
+        route = list(self.route)
 
         for i in range(len(route)):
             if random.random() < mutationRate:
