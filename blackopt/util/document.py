@@ -23,7 +23,8 @@ def generate_report(
 
     for sf, ms_dict in metrics.items():
         for key, m in ms_dict.items():
+            m.discard_warmup(0.15)
             m_groups[key].append(m)
 
     for key, ms in m_groups.items():
-        plot_group(ms, f"{problem_path}@{timestamp}", name=key)
+        plot_group(ms, f"{problem_path}@{timestamp}", name=key, stdev_factor=0.1)
