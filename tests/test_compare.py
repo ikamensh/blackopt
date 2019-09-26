@@ -1,4 +1,4 @@
-from blackopt.algorithms import HillClimber, GeneticAlgorithm
+from blackopt.algorithms import HillClimber, GeneticAlgorithm, SimAnneal
 from blackopt.examples.problems import StepProblem, StepSolution
 from blackopt.algorithms import RandomSearch
 
@@ -16,6 +16,7 @@ def test_compare():
     for problem in problems:
         sfs += [SolverFactory(GeneticAlgorithm, problem, StepSolution, 10, 1/problem.n_dim, 1)]
         sfs += [SolverFactory(HillClimber,problem, StepSolution, mutation_rate=2/problem.n_dim)]
+        sfs += [SolverFactory(SimAnneal, problem, StepSolution, mutation_rate=2 / problem.n_dim)]
         sfs.append(SolverFactory(RandomSearch, problem, StepSolution))
         
         ms = compare_solvers(trials, n_steps, sfs)

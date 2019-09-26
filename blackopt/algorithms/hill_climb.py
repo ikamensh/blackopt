@@ -12,11 +12,11 @@ class HillClimber(Solver):
         super().__init__(problem, solution_cls)
 
 
-    def solve(self, n_evaluations):
+    def solve(self, steps):
 
-        doc_freq = 1 + n_evaluations // 500
+        doc_freq = 1 + steps // 500
 
-        for i in range(n_evaluations):
+        for i in range(steps):
             solution = self.best_solution.mutate(self.mutation_rate)
             if solution.score > self.best_solution.score:
                 self.best_solution = solution

@@ -7,6 +7,7 @@ if TYPE_CHECKING:
 
 class Problem(abc.ABC):
     eval_count: int = None
+    score_span: float = 1
 
     @abc.abstractmethod
     def evaluate(self, s: Solution) -> float:

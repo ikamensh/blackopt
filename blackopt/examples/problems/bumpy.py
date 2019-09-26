@@ -25,6 +25,7 @@ class BumpyProblem(Problem):
 
         self.n_dim = n_dim
         self.expressions = expressions
+        self.score_span = 2 * len(expressions)
         self.eval_count = 0
 
     @staticmethod

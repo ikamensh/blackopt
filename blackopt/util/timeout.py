@@ -10,15 +10,16 @@ def timeout(t):
             raise UserTimeoutError()
         def new_f(*args, **kwargs):
             old = signal.signal(signal.SIGALRM, handler)
-            # assert old is signal.SIG_DFL
+            assert old is signal.SIG_DFL
             signal.setitimer(signal.ITIMER_REAL, t)
             try:
                 result = f(*args, **kwargs)
             finally:
-                # reinstall the old signal handler
-                signal.setitimer(signal.ITIMER_REAL, 0)
-                # cancel the alarm
-                signal.signal(signal.SIGALRM, old)
+                try:
+                    signal.setitimer(signal.ITIMER_REAL, 0)
+                    signal.signal(signal.SIGALRM, old)
+                except UserTimeoutError:
+                    signal.signal(signal.SIGALRM, old)
             return result
         return new_f
     return decorate

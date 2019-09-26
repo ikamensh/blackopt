@@ -14,7 +14,7 @@ class TspProblem(Problem):
         self.cities = cities
         self.n_dim = len(cities[0].coordinates)
         self.eval_count = 0
-        self.max_dist = len(self.cities) * math.sqrt(self.n_dim)
+        self.score_span = self.max_dist = len(self.cities) * math.sqrt(self.n_dim)
 
     @staticmethod
     def random_problem(n_dim: int, cities: int):

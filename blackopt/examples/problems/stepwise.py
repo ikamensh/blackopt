@@ -7,7 +7,7 @@ from blackopt.abc import Problem, Solution
 
 class StepProblem(Problem):
     def __init__(self, thresholds: List[float]):
-        self.n_dim = len(thresholds)
+        self.score_span = self.n_dim = len(thresholds)
         self.thresholds = thresholds
         for t in thresholds:
             assert 0 <= t <= 1
