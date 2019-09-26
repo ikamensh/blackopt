@@ -29,5 +29,11 @@ class Solution(abc.ABC):
             self._score = self.problem.evaluate(self)
         return self._score
 
+    def similarity(self, other: Solution):
+        if other is self or other == self:
+            return 1
+        else:
+            return 0
+
     def metrics(self) -> Dict[str, SupportsFloat]:
         return {"score": self.score}

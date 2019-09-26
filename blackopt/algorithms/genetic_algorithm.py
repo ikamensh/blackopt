@@ -36,9 +36,9 @@ class GeneticAlgorithm(Solver):
         self.avg = None
         self._rank()
 
-    def solve(self, n_evaluations):
+    def solve(self, steps):
 
-        while self.problem.eval_count < n_evaluations:
+        while self.problem.eval_count < steps:
 
             next_generation = self.population[: self.elite_size]
             next_generation += self._breed(self.popsize - self.elite_size)
@@ -80,7 +80,7 @@ class GeneticAlgorithm(Solver):
 
         return parents
 
-    def _breed(self, n: int, smoothen_chances=0) -> List[Solution]:
+    def _breed(self, n: int, smoothen_chances=0, **kwargs) -> List[Solution]:
 
         parents = self._select_parents(n, smoothen_chances)
         children: List[Solution] = []

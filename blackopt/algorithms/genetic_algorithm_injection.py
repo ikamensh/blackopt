@@ -32,9 +32,9 @@ class GeneticAlgorithmInject(GeneticAlgorithm):
 
         return best_solution
 
-    def solve(self, n_evaluations):
+    def solve(self, steps):
 
-        while self.problem.eval_count < n_evaluations:
+        while self.problem.eval_count < steps:
 
             next_generation = self.population[: self.elite_size]
             next_generation += [self._inject()]
