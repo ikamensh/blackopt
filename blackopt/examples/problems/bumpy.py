@@ -59,10 +59,6 @@ class BumpySolution(Solution):
         values = [random.random() for i in range(BumpySolution.problem.n_dim)]
         return BumpySolution(values)
 
-    @property
-    def score(self):
-        return self.problem.evaluate(self)
-
     def mutate(self, rate: float):
         new_values = []
         for v in self.genes:
