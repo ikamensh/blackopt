@@ -1,13 +1,15 @@
 from __future__ import annotations
 from typing import List
 import random
+from functools import lru_cache
 
 from blackopt.abc import Problem, Solution
 
 
 class StepProblem(Problem):
     def __init__(self, thresholds: List[float]):
-        self.score_span = self.n_dim = len(thresholds)
+        self.n_dim = len(thresholds)
+        self.score_span = len(thresholds)
         self.thresholds = thresholds
         for t in thresholds:
             assert 0 <= t <= 1
@@ -62,3 +64,15 @@ class StepSolution(Solution):
         child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
 
         return [StepSolution(child_a), StepSolution(child_b)]
+
+    @lru_cache(maxsize=512)
+    def similarity(self, other: StepSolution):
+
+        diff = 0
+        for i in range(self.problem.n_dim):
+            diff += abs(self.genes[i] - other.genes[i])
+
+        return 1 - diff / self.problem.n_dim
+
+
+

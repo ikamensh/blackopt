@@ -42,7 +42,6 @@ class BumpyProblem(Problem):
 
         return BumpyProblem(n_dim, exprs)
 
-    @lru_cache(maxsize=int(2 ** 16))
     def evaluate(self, s: BumpySolution) -> int:
         self.eval_count += 1
         return sum(evaluate_sin(s.genes, expr) for expr in self.expressions)
@@ -81,3 +80,12 @@ class BumpySolution(Solution):
         child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
 
         return [BumpySolution(child_a), BumpySolution(child_b)]
+
+    @lru_cache(maxsize=512)
+    def similarity(self, other: BumpySolution):
+
+        diff = 0
+        for i in range(self.problem.n_dim):
+            diff += abs(self.genes[i] - other.genes[i])
+
+        return 1 - diff / self.problem.n_dim

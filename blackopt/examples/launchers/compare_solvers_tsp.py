@@ -7,40 +7,30 @@ from blackopt.util.document import generate_report
 from blackopt.compare import compare_solvers, SolverFactory
 
 n_steps = int(3e5)
-n_trials = 5
+n_trials = 6
 
 cities = 40
 problem = TspProblem.random_problem(2, cities)
 
 solvers = []
-solvers.append(SolverFactory(SimAnneal, problem, TspSolution, 3 / cities))
-solvers.append(
-    SolverFactory(GeneticAlgorithm, problem, TspSolution, 3, 2 / cities, 1)
-)
 solvers.append(
     SolverFactory(Gaos, problem, TspSolution, 50, 2 / cities, 0)
 )
 solvers.append(
-    SolverFactory(Gaos, problem, TspSolution, 50, 2 / cities, 1)
-)
-solvers.append(
-    SolverFactory(Gaos, problem, TspSolution, 10, 2 / cities, 1)
-)
-solvers.append(
     SolverFactory(Gaos, problem, TspSolution, 10, 2 / cities, 0)
 )
-# solvers.append(
-#     SolverFactory(Rapga, problem, TspSolution, 50, 2 / cities, 0)
-# )
-# solvers.append(
-#     SolverFactory(Rapga, problem, TspSolution, 50, 2 / cities, 1)
-# )
-# solvers.append(
-#     SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 1)
-# )
-# solvers.append(
-#     SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 0)
-# )
+solvers.append(
+    SolverFactory(Rapga, problem, TspSolution, 50, 2 / cities, 0)
+)
+solvers.append(
+    SolverFactory(Rapga, problem, TspSolution, 50, 2 / cities, 1)
+)
+solvers.append(
+    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 1)
+)
+solvers.append(
+    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 0)
+)
 
 
 
