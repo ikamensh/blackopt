@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, TYPE_CHECKING, ClassVar, Dict
+from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict
 from collections import defaultdict
 
 import pathos
@@ -19,7 +19,7 @@ class SolverFactory:
         return self.target_cls(*self.args, **self.kwargs)
 
 
-def one_trial(steps: int, solver_constructor: SolverFactory) -> Metric:
+def one_trial(steps: int, solver_constructor: SolverFactory) -> DefaultDict[str, Metric]:
     s: Solver = solver_constructor()
     print(s)
     s.solve(steps)

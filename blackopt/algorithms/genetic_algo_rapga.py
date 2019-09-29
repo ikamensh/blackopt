@@ -22,9 +22,9 @@ class Rapga(Gaos):
         elite_size: int,
         equal_chances: float = 0.5,
         max_selective_pressure: int = 200,
-        early_stop=False,
+        early_stop=True,
         growth_factor=30,
-        diversity_threshold=0.15,
+        diversity_threshold=0.01,
         min_popsize=3,
     ):
         super().__init__(
@@ -42,7 +42,7 @@ class Rapga(Gaos):
         self.min_popsize = min_popsize
 
     def check_early_stop(self):
-        return super().early_stop() or self.actual_popsize < self.min_popsize
+        return super().check_early_stop() or self.actual_popsize < self.min_popsize
 
     def solve(self, steps):
 
@@ -86,3 +86,13 @@ class Rapga(Gaos):
     def record(self):
         super().record()
         self.record_metric("actual popsize", self.actual_popsize)
+
+    def __str__(self):
+        return (
+            f"{self.name} with mut_rate - {self.mutation_rate} & "
+            f"pop_size - {self.popsize} & "
+            f"elite - {self.elite_size} & equal_c - {self.equal_chances}"
+            f"div threshold - {self.diversity_threshold}"
+
+        )
+

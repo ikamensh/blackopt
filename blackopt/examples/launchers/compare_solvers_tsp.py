@@ -6,36 +6,38 @@ from blackopt.util.document import generate_report
 
 from blackopt.compare import compare_solvers, SolverFactory
 
-n_steps = int(3e5)
-n_trials = 1
+n_steps = int(2e5)
+n_trials = 3
 
 cities = 40
 problem = TspProblem.random_problem(2, cities)
 
 solvers = []
 solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 1)
+    SolverFactory(
+        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5, diversity_threshold=0.01
+    )
 )
 solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 0)
+    SolverFactory(
+        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5, diversity_threshold=0.05
+    )
 )
 solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 1, 0.5)
+    SolverFactory(
+        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5
+    )
 )
 solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5)
+    SolverFactory(
+        Rapga, problem, TspSolution, 15, 2 / cities, 0, 0.5, diversity_threshold=0.05
+    )
 )
-solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 1, 0.95)
-)
-solvers.append(
-    SolverFactory(Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.95)
-)
-
 
 
 if __name__ == "__main__":
     import time
+
     t = time.time()
     ms = compare_solvers(n_trials, n_steps, solvers)
     generate_report(problem, ms)

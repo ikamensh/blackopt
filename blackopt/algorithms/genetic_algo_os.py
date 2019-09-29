@@ -20,7 +20,7 @@ class Gaos(GeneticAlgorithm):
         elite_size: int,
         equal_chances: float = 0.5,
         max_selective_pressure = 200,
-        early_stop = False,
+        early_stop = True,
     ):
         super().__init__(problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances)
         self.max_selective_pressure = max_selective_pressure
