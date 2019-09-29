@@ -27,4 +27,4 @@ def generate_report(
             m_groups[key].append(m)
 
     for key, ms in m_groups.items():
-        plot_group(ms, f"{problem_path}@{timestamp}", name=key, stdev_factor=0.1)
+        plot_group(ms, f"{problem_path}@{timestamp}", name=key, stdev_factor=0.1, smoothen=False)

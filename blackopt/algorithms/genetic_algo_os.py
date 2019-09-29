@@ -10,6 +10,7 @@ def keep(child_score: float, parent_min: float, diff: float, pressure: float):
 
 class Gaos(GeneticAlgorithm):
     name = "Gaos"
+    max_selective_pressure = 200
 
     def solve(self, steps):
 
@@ -30,14 +31,19 @@ class Gaos(GeneticAlgorithm):
 
         print(f"{self} is Done in {self.generation} generations")
 
-    def _breed(self, n: int, smoothen_chances=0, pressure=0.5) -> List[Solution]:
+    def record(self):
+        super().record()
+        self.record_metric("selective pressure", self.selective_pressure)
+
+
+    def _breed(self, n: int, pressure=0.5) -> List[Solution]:
 
         result: List[Solution] = []
         ctr = 0
-        while len(result) < n and ctr < 1000:
+        while len(result) < n and ctr < self.max_selective_pressure:
             ctr += 1
             children = []
-            parents = self._select_parents(n, smoothen_chances)
+            parents = self._select_parents(n)
 
             parent_scores = {}  # child -> min_parent_score, parents_diff
             for i in range(n):
@@ -59,9 +65,11 @@ class Gaos(GeneticAlgorithm):
                 c for c in children if keep(c.score, *parent_scores[c], pressure)
             ]
 
-        if len(result) < n:
-            result += [
-                self.solution_cls.random_solution() for i in range(n - len(result))
-            ]
+        self.selective_pressure = ctr
+
+        # if len(result) < n:
+        #     result += [
+        #         self.solution_cls.random_solution() for i in range(n - len(result))
+        #     ]
 
         return result[:n]

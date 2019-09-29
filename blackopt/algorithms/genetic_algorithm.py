@@ -18,9 +18,11 @@ class GeneticAlgorithm(Solver):
         popsize: int,
         mutation_rate: float,
         elite_size: int,
+        equal_chances: float = 0.5
     ):
 
         assert 0 < mutation_rate <= 1
+        assert 0 <= equal_chances <= 1
         assert popsize > 1
         assert popsize > elite_size
         assert isinstance(elite_size, int)
@@ -28,6 +30,7 @@ class GeneticAlgorithm(Solver):
         self.mutation_rate = mutation_rate
         self.popsize = popsize
         self.elite_size = elite_size
+        self.equal_chances = equal_chances
 
         super().__init__(problem, solution_cls)
 
@@ -35,6 +38,10 @@ class GeneticAlgorithm(Solver):
         self.generation = 1
         self.avg = None
         self._rank()
+
+    @property
+    def actual_popsize(self):
+        return len(self.population)
 
     def solve(self, steps):
 
@@ -66,23 +73,23 @@ class GeneticAlgorithm(Solver):
         for k, lst in aggr.items():
             self.record_metric(
                 f"average_{k}",
-                sum(lst) / self.popsize,
+                sum(lst) / self.actual_popsize,
             )
 
-    def _select_parents(self, n: int, smoothen_chances: float) -> List[Solution]:
+    def _select_parents(self, n: int) -> List[Solution]:
         indexes = np.arange(0, len(self.population), dtype=np.int)
         chances = np.arange(
             len(self.population), 0, -1, dtype=np.int
-        ) + smoothen_chances / (1 - smoothen_chances + 1e-9)
+        ) + self.equal_chances / (1 - self.equal_chances + 1e-9)
         chances = chances / sum(chances)
         parent_indexes = np.random.choice(indexes, n, True, chances)
         parents = np.array(self.population)[parent_indexes]
 
         return parents
 
-    def _breed(self, n: int, smoothen_chances=0, **kwargs) -> List[Solution]:
+    def _breed(self, n: int) -> List[Solution]:
 
-        parents = self._select_parents(n, smoothen_chances)
+        parents = self._select_parents(n)
         children: List[Solution] = []
 
         for i in range(n):
@@ -98,5 +105,5 @@ class GeneticAlgorithm(Solver):
         return (
             f"{self.name} with mut_rate - {self.mutation_rate} & "
             f"pop_size - {self.popsize} & "
-            f"elite - {self.elite_size}"
+            f"elite - {self.elite_size} & equal_c - {self.equal_chances}"
         )

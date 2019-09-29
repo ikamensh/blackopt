@@ -1,4 +1,5 @@
 from blackopt.algorithms import Gaos
+from blackopt.abc import Problem
 import random
 
 
@@ -11,7 +12,21 @@ def is_diverse(new, pop_sample, pressure):
 
 class Rapga(Gaos):
     name = "Rapga"
-    growth_factor = 30
+
+    def __init__(
+        self,
+        problem: Problem,
+        solution_cls,
+        popsize: int,
+        mutation_rate: float,
+        elite_size: int,
+        equal_chances: float = 0.5,
+        growth_factor = 30
+    ):
+        super().__init__(problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances)
+        self.growth_factor = growth_factor
+
+
 
     def solve(self, steps):
 
@@ -35,6 +50,8 @@ class Rapga(Gaos):
                 next_generation += [
                     c for c in new if is_diverse(c, diversity_sample, 0.15)
                 ]
+                if self.selective_pressure == self.max_selective_pressure:
+                    break
 
             self.population = next_generation
 
@@ -45,3 +62,8 @@ class Rapga(Gaos):
                 print("Generation", self.generation, self.problem.eval_count)
 
         print(f"{self} is Done in {self.generation} generations")
+
+
+    def record(self):
+        super().record()
+        self.record_metric("actual popsize", self.actual_popsize)
