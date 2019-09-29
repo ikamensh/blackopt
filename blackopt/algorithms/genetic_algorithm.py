@@ -57,7 +57,10 @@ class GeneticAlgorithm(Solver):
             if not self.generation % 100:
                 print("Generation", self.generation, self.problem.eval_count)
 
-        print(f"{self} is Done in {self.generation} generations")
+        self.salut()
+
+    def salut(self):
+        print(f"{self} is Done in {self.generation} generations / {self.problem.eval_count} evaluations.")
 
     def _rank(self):
         self.population = sorted(self.population, key=lambda x: x.score, reverse=True)

@@ -21,12 +21,28 @@ class Rapga(Gaos):
         mutation_rate: float,
         elite_size: int,
         equal_chances: float = 0.5,
-        growth_factor = 30
+        max_selective_pressure: int = 200,
+        early_stop=False,
+        growth_factor=30,
+        diversity_threshold=0.15,
+        min_popsize=3,
     ):
-        super().__init__(problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances)
+        super().__init__(
+            problem,
+            solution_cls,
+            popsize,
+            mutation_rate,
+            elite_size,
+            equal_chances,
+            max_selective_pressure,
+            early_stop,
+        )
         self.growth_factor = growth_factor
+        self.diversity_threshold = diversity_threshold
+        self.min_popsize = min_popsize
 
-
+    def check_early_stop(self):
+        return super().early_stop() or self.actual_popsize < self.min_popsize
 
     def solve(self, steps):
 
@@ -48,7 +64,9 @@ class Rapga(Gaos):
                     else random.sample(next_generation, self.popsize * 3)
                 )
                 next_generation += [
-                    c for c in new if is_diverse(c, diversity_sample, 0.15)
+                    c
+                    for c in new
+                    if is_diverse(c, diversity_sample, self.diversity_threshold)
                 ]
                 if self.selective_pressure == self.max_selective_pressure:
                     break
@@ -61,8 +79,9 @@ class Rapga(Gaos):
             if not self.generation % 5:
                 print("Generation", self.generation, self.problem.eval_count)
 
-        print(f"{self} is Done in {self.generation} generations")
-
+            if self.early_stop and self.check_early_stop():
+                break
+        self.salut()
 
     def record(self):
         super().record()

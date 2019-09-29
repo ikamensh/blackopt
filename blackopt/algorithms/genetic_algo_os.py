@@ -1,6 +1,6 @@
 from typing import List
 
-from blackopt.abc import Solution
+from blackopt.abc import Solution, Problem
 from blackopt.algorithms import GeneticAlgorithm
 
 
@@ -10,10 +10,26 @@ def keep(child_score: float, parent_min: float, diff: float, pressure: float):
 
 class Gaos(GeneticAlgorithm):
     name = "Gaos"
-    max_selective_pressure = 200
+
+    def __init__(
+        self,
+        problem: Problem,
+        solution_cls,
+        popsize: int,
+        mutation_rate: float,
+        elite_size: int,
+        equal_chances: float = 0.5,
+        max_selective_pressure = 200,
+        early_stop = False,
+    ):
+        super().__init__(problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances)
+        self.max_selective_pressure = max_selective_pressure
+        self.early_stop = early_stop
+
+    def check_early_stop(self):
+        return self.selective_pressure >= self.max_selective_pressure
 
     def solve(self, steps):
-
         while self.problem.eval_count < steps:
 
             next_generation = self.population[: self.elite_size]
@@ -29,7 +45,11 @@ class Gaos(GeneticAlgorithm):
             if not self.generation % 10:
                 print("Generation", self.generation, self.problem.eval_count)
 
-        print(f"{self} is Done in {self.generation} generations")
+            if self.early_stop and self.check_early_stop():
+                break
+
+        self.salut()
+
 
     def record(self):
         super().record()
@@ -66,10 +86,5 @@ class Gaos(GeneticAlgorithm):
             ]
 
         self.selective_pressure = ctr
-
-        # if len(result) < n:
-        #     result += [
-        #         self.solution_cls.random_solution() for i in range(n - len(result))
-        #     ]
 
         return result[:n]
