@@ -23,9 +23,8 @@ class Rapga(Gaos):
         equal_chances: float = 0.5,
         max_selective_pressure: int = 200,
         early_stop=True,
-        growth_factor=30,
         diversity_threshold=0.01,
-        min_popsize=3,
+        min_popsize=None,
     ):
         super().__init__(
             problem,
@@ -37,31 +36,27 @@ class Rapga(Gaos):
             max_selective_pressure,
             early_stop,
         )
-        self.growth_factor = growth_factor
         self.diversity_threshold = diversity_threshold
-        self.min_popsize = min_popsize
+        self.min_popsize = min_popsize or ( popsize // 10 + 2)
 
     def check_early_stop(self):
         return super().check_early_stop() or self.actual_popsize < self.min_popsize
 
     def solve(self, steps):
 
-        self.population += [
-            self.solution_cls.random_solution()
-            for i in range(self.growth_factor * self.popsize)
-        ]
+        popsize_sqrt = int(self.popsize ** (1/2)) + 1
         self._rank()
-        while self.problem.eval_count < steps:
+        while self.problem.eval_count < steps and self.actual_popsize:
 
             next_generation = self.population[: self.elite_size]
 
-            for i in range(self.growth_factor):
+            for i in range(popsize_sqrt):
                 pressure = 0.8 * self.problem.eval_count / steps
-                new = self._breed(self.popsize - self.elite_size, pressure=pressure)
+                new = self._breed(popsize_sqrt, pressure=pressure)
                 diversity_sample = (
                     next_generation
-                    if len(next_generation) <= self.popsize * 3
-                    else random.sample(next_generation, self.popsize * 3)
+                    if len(next_generation) <= popsize_sqrt * 2
+                    else random.sample(next_generation, popsize_sqrt * 2)
                 )
                 next_generation += [
                     c
@@ -81,6 +76,7 @@ class Rapga(Gaos):
 
             if self.early_stop and self.check_early_stop():
                 break
+
         self.salut()
 
     def record(self):
@@ -89,7 +85,7 @@ class Rapga(Gaos):
 
     def __str__(self):
         return (
-            f"{self.name} with mut_rate - {self.mutation_rate} & "
+            f"{self.name} with mut_rate - {self.mutation_rate:.5f} & "
             f"pop_size - {self.popsize} & "
             f"elite - {self.elite_size} & equal_c - {self.equal_chances}"
             f"div threshold - {self.diversity_threshold}"

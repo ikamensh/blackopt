@@ -1,36 +1,27 @@
 from blackopt.examples.problems import TspProblem, TspSolution
-from blackopt.algorithms import RandomSearch, HillClimber, Gaos, Rapga
+from blackopt.algorithms import RandomSearch, HillClimber, Gaos, Rapga, Sasegasa
 from blackopt.algorithms import GeneticAlgorithm, SimAnneal
 from blackopt.util.document import generate_report
 
 
 from blackopt.compare import compare_solvers, SolverFactory
 
-n_steps = int(2e5)
+n_steps = int(1e5)
 n_trials = 3
 
 cities = 40
 problem = TspProblem.random_problem(2, cities)
 
 solvers = []
+
 solvers.append(
     SolverFactory(
-        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5, diversity_threshold=0.01
+        Rapga, problem, TspSolution, 600, 2 / cities, 0, 0.5
     )
 )
 solvers.append(
     SolverFactory(
-        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5, diversity_threshold=0.05
-    )
-)
-solvers.append(
-    SolverFactory(
-        Rapga, problem, TspSolution, 10, 2 / cities, 0, 0.5
-    )
-)
-solvers.append(
-    SolverFactory(
-        Rapga, problem, TspSolution, 15, 2 / cities, 0, 0.5, diversity_threshold=0.05
+        Sasegasa, problem, TspSolution, 150, 2 / cities, 0, 0.5, n_villages=12
     )
 )
 

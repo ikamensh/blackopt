@@ -106,7 +106,7 @@ class GeneticAlgorithm(Solver):
 
     def __str__(self):
         return (
-            f"{self.name} with mut_rate - {self.mutation_rate} & "
+            f"{self.name} with mut_rate - {self.mutation_rate:.5f} & "
             f"pop_size - {self.popsize} & "
             f"elite - {self.elite_size} & equal_c - {self.equal_chances}"
         )
