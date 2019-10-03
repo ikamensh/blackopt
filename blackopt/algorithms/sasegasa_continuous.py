@@ -29,6 +29,8 @@ class SasegasaContinuous(Solver):
         mutation_rate: float,
         elite_size: int = 0,
         equal_chances: float = 0.5,
+        max_selective_pressure: int = 200,
+
     ):
         self.problem = problem
         self.solution_cls = solution_cls
@@ -36,6 +38,7 @@ class SasegasaContinuous(Solver):
         self.mutation_rate = mutation_rate
         self.elite_size = elite_size
         self.equal_chances = equal_chances
+        self.max_selective_pressure = max_selective_pressure
         self.pool = pathos.pools.ProcessPool()
         self.n_villages = self.pool.ncpus
 
@@ -47,6 +50,7 @@ class SasegasaContinuous(Solver):
                 self.mutation_rate,
                 self.elite_size,
                 self.equal_chances,
+                max_selective_pressure = max_selective_pressure,
                 early_stop=True,
             )
             for i in range(self.n_villages)
