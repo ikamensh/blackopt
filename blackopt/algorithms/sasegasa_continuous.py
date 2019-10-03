@@ -30,6 +30,8 @@ class SasegasaContinuous(Solver):
         elite_size: int = 0,
         equal_chances: float = 0.5,
         max_selective_pressure: int = 200,
+        n_villages = None
+
 
     ):
         self.problem = problem
@@ -40,7 +42,7 @@ class SasegasaContinuous(Solver):
         self.equal_chances = equal_chances
         self.max_selective_pressure = max_selective_pressure
         self.pool = pathos.pools.ProcessPool()
-        self.n_villages = int(self.pool.ncpus * 1.2)
+        self.n_villages = n_villages or int(self.pool.ncpus * 1.2)
 
         self.villages = [
             Rapga(
