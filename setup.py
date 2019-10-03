@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = 0.8
+version = 0.10
 
 
 def get_requirements():
