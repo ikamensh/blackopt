@@ -2,7 +2,6 @@ from blackopt.algorithms import Rapga
 from blackopt.abc import Problem, Solver
 from typing import List, Tuple
 
-import random
 
 import pathos
 
@@ -19,13 +18,14 @@ def iteration(inp: Tuple[Rapga, int]):
 
 
 class Sasegasa(Solver):
+    name = "Sasegasa"
     def __init__(
         self,
         problem: Problem,
         solution_cls,
         popsize: int,
         mutation_rate: float,
-        elite_size: int,
+        elite_size: int = 0,
         equal_chances: float = 0.5,
         growth_factor=30,
         n_villages=12,
@@ -44,6 +44,7 @@ class Sasegasa(Solver):
         self.pool = pathos.pools.ProcessPool()
 
     def solve(self, steps):
+        self.problem.eval_count = 0
         runs = sum(range(self.n_villages + 1))
 
         steps_per_run = steps // runs
@@ -75,7 +76,6 @@ class Sasegasa(Solver):
             for v in villages:
                 population += v.population
 
-            random.shuffle(population)
             self.n_villages -= 1
             new_size = len(population) // self.n_villages
             populations = [population[i * new_size: i * new_size + new_size] for i in range(self.n_villages)]

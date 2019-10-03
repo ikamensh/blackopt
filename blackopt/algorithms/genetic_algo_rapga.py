@@ -43,7 +43,7 @@ class Rapga(Gaos):
         return super().check_early_stop() or self.actual_popsize < self.min_popsize
 
     def solve(self, steps):
-
+        self.problem.eval_count = 0
         popsize_sqrt = int(self.popsize ** (1/2)) + 1
         self._rank()
         while self.problem.eval_count < steps and self.actual_popsize:

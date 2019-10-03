@@ -3,6 +3,8 @@ from blackopt.algorithms.genetic_algorithm_injection import GeneticAlgorithmInje
 from blackopt.algorithms.genetic_algo_os import Gaos
 from blackopt.algorithms.genetic_algo_rapga import Rapga
 from blackopt.algorithms.sasegasa import Sasegasa
+from blackopt.algorithms.sasegasa_continuous import SasegasaContinuous
+
 from blackopt.algorithms.multicore_genetic_algorithm import MulticoreGeneticAlgorithm
 from blackopt.algorithms.hill_climb import HillClimber
 from blackopt.algorithms.random_search import RandomSearch, MulticoreRS

@@ -14,3 +14,14 @@ def test_random_search():
     rs.solve(100)
 
     assert isinstance(rs.best_solution.score, (int, float))
+
+
+def test_checkpoint():
+    rs = RandomSearch(EasyProblem(), EasySolution)
+    best_score = rs.best_solution.score
+
+    rs.checkpoint()
+
+    restored = Solver.restore_latest(rs.problem)
+
+    assert restored.best_solution.score == best_score

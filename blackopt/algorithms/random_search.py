@@ -25,6 +25,7 @@ class MulticoreRS(Solver):
     name = "multicore random search"
 
     def solve(self, steps):
+        self.problem.eval_count = 0
         pool = pathos.pools.ProcessPool()
         n_cpus = pool.ncpus
 

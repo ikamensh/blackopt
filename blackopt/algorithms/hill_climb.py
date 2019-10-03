@@ -13,7 +13,7 @@ class HillClimber(Solver):
 
 
     def solve(self, steps):
-
+        self.problem.eval_count = 0
         doc_freq = 1 + steps // 500
 
         for i in range(steps):

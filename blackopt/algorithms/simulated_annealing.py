@@ -55,7 +55,7 @@ class SimAnneal(Solver):
         """
         Execute simulated annealing algorithm
         """
-
+        self.problem.eval_count = 0
         self.temp = self.temp_initial
         self.alpha = 2 ** (- self.half_times / steps)
         doc_freq = 1 + steps // 500

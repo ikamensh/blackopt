@@ -29,7 +29,7 @@ class MulticoreGeneticAlgorithm(Solver):
         self.gas: List[GeneticAlgorithm] = [GeneticAlgorithm(problem, solution_cls, *args, **kwargs) for i in range(self.pool.ncpus)]
 
     def solve(self, steps):
-
+        self.problem.eval_count = 0
         mapping_steps = int(steps ** (1 / 5))
         steps_per_pool = steps // (self.pool.ncpus * mapping_steps)
 

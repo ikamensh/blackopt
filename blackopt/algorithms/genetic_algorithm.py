@@ -44,7 +44,7 @@ class GeneticAlgorithm(Solver):
         return len(self.population)
 
     def solve(self, steps):
-
+        self.problem.eval_count = 0
         while self.problem.eval_count < steps:
 
             next_generation = self.population[: self.elite_size]

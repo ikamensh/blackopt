@@ -30,6 +30,7 @@ class Gaos(GeneticAlgorithm):
         return self.selective_pressure >= self.max_selective_pressure
 
     def solve(self, steps):
+        self.problem.eval_count = 0
         while self.problem.eval_count < steps and self.actual_popsize:
 
             next_generation = self.population[: self.elite_size]
