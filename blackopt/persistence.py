@@ -20,10 +20,7 @@ class ContinuousOptimizer:
         self.steps = 0
         self.step_callbacks = step_callbacks or []
 
-        try:
-            self.restore_latest()
-        except:
-            self.solver = solver_factory()
+        self.solver = solver_factory()
 
     def run(self):
         self.logger.info("starting optimization")
