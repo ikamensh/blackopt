@@ -17,7 +17,7 @@ class GeneticAlgorithm(Solver):
         solution_cls,
         popsize: int,
         mutation_rate: float,
-        elite_size: int,
+        elite_size: int = 0,
         equal_chances: float = 0.5
     ):
 
