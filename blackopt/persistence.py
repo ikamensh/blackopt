@@ -13,12 +13,16 @@ class ContinuousOptimizer:
         solver_factory: Callable[[], Solver],
         evals_per_step=1_000_000,
         step_callbacks: List[Callable[[ContinuousOptimizer], NoReturn]]= None,
+        max_repeats = 10
     ):
         self.problem = problem
         self.evals_per_step = evals_per_step
         self.logger = get_logger()
         self.steps = 0
         self.step_callbacks = step_callbacks or []
+        self.max_repeats = max_repeats
+        self.repeats = 0
+        self.last_exception = "No exception so far"
 
         self.solver = solver_factory()
 
@@ -29,6 +33,12 @@ class ContinuousOptimizer:
                 self.step()
                 self.checkpoint()
             except Exception as e:
+                if str(e) == self.last_exception:
+                    self.repeats += 1
+                    if self.repeats > self.max_repeats:
+                        break
+                else:
+                    self.repeats = 0
                 self.logger.warning(f"Encountered an exception: {e}")
                 self.restore_latest()
 
