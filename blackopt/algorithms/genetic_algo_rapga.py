@@ -56,7 +56,7 @@ class Rapga(Gaos):
 
             next_generation = self.population[: self.elite_size]
 
-            for i in range(popsize_sqrt):
+            while len(next_generation) < self.popsize:
                 pressure = 0.8 * self.problem.eval_count / steps
                 new = self._breed(popsize_sqrt, pressure=pressure)
                 diversity_sample = (
