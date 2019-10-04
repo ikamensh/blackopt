@@ -9,6 +9,7 @@ if TYPE_CHECKING:
 class Solution(abc.ABC):
     problem: Problem = None
     _score: float = None
+    regularization_score = 0
 
     @staticmethod
     @abc.abstractmethod

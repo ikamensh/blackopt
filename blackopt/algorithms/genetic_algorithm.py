@@ -63,7 +63,7 @@ class GeneticAlgorithm(Solver):
         print(f"{self} is Done in {self.generation} generations / {self.problem.eval_count} evaluations.")
 
     def _rank(self):
-        self.population = sorted(self.population, key=lambda x: x.score, reverse=True)
+        self.population = sorted(self.population, key=lambda x: x.score + x.regularization_score, reverse=True)
         self.best_solution: Solution = max(self.population + [self.best_solution], key=lambda x: x.score)
 
     def record(self):

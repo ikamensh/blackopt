@@ -3,12 +3,18 @@ from blackopt.abc import Problem
 import random
 
 
-def is_diverse(new, pop_sample, pressure):
+def average_similarity(new, pop_sample):
     if len(pop_sample) == 0:
-        return True
-    avg_similarity = sum(p.similarity(new) for p in pop_sample) / len(pop_sample)
+        return 0
+    return sum(p.similarity(new) for p in pop_sample) / len(pop_sample)
+
+def is_diverse(avg_similarity, pressure):
     return avg_similarity < 1 - pressure
 
+default_elite = 0
+default_eq_ch = 0.5
+default_max_sel_pressure = 200
+default_div_threshold = 0.01
 
 class Rapga(Gaos):
     name = "Rapga"
@@ -19,11 +25,11 @@ class Rapga(Gaos):
         solution_cls,
         popsize: int,
         mutation_rate: float,
-        elite_size: int = 0,
-        equal_chances: float = 0.5,
-        max_selective_pressure: int = 200,
+        elite_size: int = default_elite,
+        equal_chances: float = default_eq_ch,
+        max_selective_pressure: int = default_max_sel_pressure,
         early_stop=True,
-        diversity_threshold=0.01,
+        diversity_threshold=default_div_threshold,
         min_popsize=None,
     ):
         super().__init__(
@@ -58,10 +64,15 @@ class Rapga(Gaos):
                     if len(next_generation) <= popsize_sqrt * 2
                     else random.sample(next_generation, popsize_sqrt * 2)
                 )
+                similarities = {}
+                for n in new:
+                    similarities[n] = average_similarity(n, diversity_sample)
+                    n.regularization_score -= similarities[n]
+
                 next_generation += [
                     c
                     for c in new
-                    if is_diverse(c, diversity_sample, self.diversity_threshold)
+                    if is_diverse(similarities[c], self.diversity_threshold)
                 ]
                 if self.selective_pressure == self.max_selective_pressure:
                     break
@@ -84,11 +95,16 @@ class Rapga(Gaos):
         self.record_metric("actual popsize", self.actual_popsize)
 
     def __str__(self):
-        return (
-            f"{self.name} with mut_rate - {self.mutation_rate:.5f} & "
-            f"pop_size - {self.actual_popsize} & "
-            f"elite - {self.elite_size} & equal_c - {self.equal_chances}"
-            f"div threshold - {self.diversity_threshold}"
+        string = f"{self.name} with mut_rate - {self.mutation_rate:.5f} & " \
+            f"pop_size - {self.actual_popsize} "
+        if self.elite_size != default_elite:
+            string += f" & elite - {self.elite_size}"
+        if self.equal_chances != default_eq_ch:
+            string += f" & equal_c - {self.equal_chances}"
+        if self.diversity_threshold != default_div_threshold:
+            f" & div threshold - {self.diversity_threshold}"
 
-        )
+        return string
+
+
 
