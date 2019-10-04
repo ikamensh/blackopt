@@ -67,7 +67,7 @@ class Rapga(Gaos):
                 similarities = {}
                 for n in new:
                     similarities[n] = average_similarity(n, diversity_sample)
-                    n.regularization_score -= similarities[n]
+                    n.regularization_score -= 0.2 * self.problem.score_span * similarities[n]
 
                 next_generation += [
                     c
