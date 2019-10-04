@@ -30,6 +30,7 @@ class SasegasaContinuous(Solver):
         elite_size: int = 0,
         equal_chances: float = 0.5,
         max_selective_pressure: int = 200,
+        diversity_threshold = 0.01,
         n_villages = None
 
 
@@ -52,6 +53,7 @@ class SasegasaContinuous(Solver):
                 self.mutation_rate,
                 self.elite_size,
                 self.equal_chances,
+                diversity_threshold=diversity_threshold,
                 max_selective_pressure = max_selective_pressure,
                 early_stop=True,
             )
