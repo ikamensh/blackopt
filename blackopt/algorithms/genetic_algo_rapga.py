@@ -74,10 +74,12 @@ class Rapga(Gaos):
                     for c in new
                     if is_diverse(similarities[c], self.diversity_threshold)
                 ]
-                if self.selective_pressure == self.max_selective_pressure:
+                if self.selective_pressure >= self.max_selective_pressure:
                     break
-
-            self.population = next_generation
+            if next_generation:
+                self.population = next_generation
+            else:
+                break
 
             self._rank()
             self.record()
