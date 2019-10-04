@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List
 import random
 import math
@@ -23,7 +22,7 @@ class TspProblem(Problem):
         cities = [City(n_dim) for _ in range(cities)]
         return TspProblem(cities)
 
-    def evaluate(self, s: TspSolution):
+    def evaluate(self, s: 'TspSolution'):
         self.eval_count += 1
         return self.max_dist - self.route_distance(s.route)
 
@@ -45,12 +44,12 @@ class TspSolution(Solution):
         assert set(route) == set(self.problem.cities)
 
     @staticmethod
-    def random_solution() -> TspSolution:
+    def random_solution() -> 'TspSolution':
         cpy = list(TspSolution.problem.cities)
         random.shuffle(cpy)
         return TspSolution(cpy)
 
-    def mutate(self, mutationRate: float) -> TspSolution:
+    def mutate(self, mutationRate: float) -> 'TspSolution':
         route = list(self.route)
 
         for i in range(len(route)):
@@ -60,7 +59,7 @@ class TspSolution(Solution):
 
         return TspSolution(route)
 
-    def crossover(self, other: TspSolution):
+    def crossover(self, other: 'TspSolution'):
         crossover_point = random.randint(1, len(self.route) - 1)
 
         child_left = self.route[:crossover_point]
@@ -70,7 +69,7 @@ class TspSolution(Solution):
         return [TspSolution(child_left + child_right)]
 
     @lru_cache(maxsize=512)
-    def similarity(self, other: TspSolution):
+    def similarity(self, other: 'TspSolution'):
         r1 = self.route
         r2 = other.route
 

@@ -1,6 +1,6 @@
 from setuptools import setup
 
-version = 0.14
+version = 0.15
 
 
 def get_requirements():
@@ -28,12 +28,13 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
     license="MIT",
     long_description="In a far, far away galaxy...",
     install_requires=get_requirements(),
-    python_requires=">=3.7",
+    python_requires=">=3.6",
     url="https://github.com/ikamensh/optim",
 )

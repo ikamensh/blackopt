@@ -1,4 +1,3 @@
-from __future__ import annotations
 import os
 import abc
 from typing import ClassVar, Dict, DefaultDict, SupportsFloat
@@ -59,7 +58,7 @@ class Solver(abc.ABC):
             dill.dump(self, f)
 
     @staticmethod
-    def restore_latest(problem: Problem) -> Solver:
+    def restore_latest(problem: Problem) -> 'Solver':
         directory = os.path.join(Solver.checkpoints_folder, str(problem))
         checkpoints = os.listdir(directory)
 

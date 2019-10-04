@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict
 from collections import defaultdict
 
@@ -10,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class SolverFactory:
-    def __init__(self, target_cls: ClassVar[Solver], *args, **kwargs):
+    def __init__(self, target_cls: ClassVar['Solver'], *args, **kwargs):
         self.target_cls = target_cls
         self.args = args
         self.kwargs = kwargs
@@ -19,14 +18,14 @@ class SolverFactory:
         return self.target_cls(*self.args, **self.kwargs)
 
 
-def one_trial(steps: int, solver_constructor: SolverFactory) -> DefaultDict[str, Metric]:
+def one_trial(steps: int, solver_constructor: SolverFactory) -> DefaultDict[str, 'Metric']:
     s: Solver = solver_constructor()
     print(s)
     s.solve(steps)
     return s.metrics
 
 
-def n_runs(trials: int, steps: int, solver: SolverFactory) -> Metric:
+def n_runs(trials: int, steps: int, solver: SolverFactory) -> 'Metric':
 
     pool = pathos.pools.ProcessPool()
     metrics = pool.map(lambda x: one_trial(steps, solver), "x" * trials)
@@ -36,11 +35,11 @@ def n_runs(trials: int, steps: int, solver: SolverFactory) -> Metric:
 
 def compare_solvers(
     trials: int, steps: int, solvers: List[SolverFactory]
-) -> Dict[SolverFactory, Dict[str, Metric]]:
+) -> Dict[SolverFactory, Dict[str, 'Metric']]:
     pool = pathos.pools.ProcessPool()
 
     to_map = solvers * trials
-    metrics: List[Dict[str, Metric]] = pool.map(
+    metrics: List[Dict[str, 'Metric']] = pool.map(
         lambda solver: one_trial(steps, solver), solvers * trials
     )
     solver_to_metrics = defaultdict(lambda :defaultdict(list))

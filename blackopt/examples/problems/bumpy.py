@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List
 import random
 from functools import lru_cache
@@ -42,7 +41,7 @@ class BumpyProblem(Problem):
 
         return BumpyProblem(n_dim, exprs)
 
-    def evaluate(self, s: BumpySolution) -> int:
+    def evaluate(self, s: 'BumpySolution') -> int:
         self.eval_count += 1
         return sum(evaluate_sin(s.genes, expr) for expr in self.expressions)
 
@@ -69,7 +68,7 @@ class BumpySolution(Solution):
 
         return BumpySolution(new_values)
 
-    def crossover(self, other: BumpySolution):
+    def crossover(self, other: 'BumpySolution'):
         crossover_point = random.randint(1, len(self.genes) - 1)
 
         child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
@@ -78,7 +77,7 @@ class BumpySolution(Solution):
         return [BumpySolution(child_a), BumpySolution(child_b)]
 
     @lru_cache(maxsize=512)
-    def similarity(self, other: BumpySolution):
+    def similarity(self, other: 'BumpySolution'):
 
         diff = 0
         for i in range(self.problem.n_dim):

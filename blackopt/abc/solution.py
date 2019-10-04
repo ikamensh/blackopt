@@ -1,4 +1,3 @@
-from __future__ import annotations
 import abc
 from typing import TYPE_CHECKING, List, Dict, SupportsFloat
 
@@ -7,21 +6,21 @@ if TYPE_CHECKING:
 
 
 class Solution(abc.ABC):
-    problem: Problem = None
+    problem: 'Problem' = None
     _score: float = None
     regularization_score = 0
 
     @staticmethod
     @abc.abstractmethod
-    def random_solution() -> Solution:
+    def random_solution() -> 'Solution':
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def mutate(self, rate: float) -> Solution:
+    def mutate(self, rate: float) -> 'Solution':
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def crossover(self, other: Solution) -> List[Solution]:
+    def crossover(self, other: 'Solution') -> List['Solution']:
         raise NotImplementedError()
 
     @property
@@ -30,7 +29,7 @@ class Solution(abc.ABC):
             self._score = self.problem.evaluate(self)
         return self._score
 
-    def similarity(self, other: Solution):
+    def similarity(self, other: 'Solution'):
         if other is self or other == self:
             return 1
         else:

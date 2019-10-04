@@ -1,4 +1,3 @@
-from __future__ import annotations
 from blackopt.abc.solver import Solver, Problem, Solution
 import math
 import random

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from blackopt.abc.solver import Solver
 
 class RandomSearch(Solver):
@@ -48,7 +47,7 @@ class MulticoreRS(Solver):
             print(i * n_cpus * self.steps_per_pool)
 
     @staticmethod
-    def _solve_pool(self: MulticoreRS):
+    def _solve_pool(self: 'MulticoreRS'):
 
         doc_freq = 1 + self.steps_per_pool // 500
 

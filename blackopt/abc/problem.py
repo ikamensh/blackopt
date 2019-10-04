@@ -1,4 +1,3 @@
-from __future__ import annotations
 import abc
 import os
 import dill
@@ -16,7 +15,7 @@ class Problem(abc.ABC):
     store_dir = "_problems"
 
     @abc.abstractmethod
-    def evaluate(self, s: Solution) -> float:
+    def evaluate(self, s: 'Solution') -> float:
         raise NotImplementedError()
 
     @abc.abstractmethod
@@ -36,7 +35,7 @@ class Problem(abc.ABC):
             print(f"Stored problem as {identifier}")
 
     @staticmethod
-    def load(identifier: str) -> Problem:
+    def load(identifier: str) -> 'Problem':
         directory = os.path.join(Problem.store_dir)
 
         with open(os.path.join(directory, identifier), 'rb') as f:

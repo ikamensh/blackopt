@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import List
 import random
 from functools import lru_cache
@@ -30,7 +29,7 @@ class StepProblem(Problem):
 
         return result
 
-    def evaluate(self, s: StepSolution) -> int:
+    def evaluate(self, s: 'StepSolution') -> int:
         self.eval_count += 1
         return self._step_function(s.genes, self.thresholds)
 
@@ -57,7 +56,7 @@ class StepSolution(Solution):
 
         return StepSolution(new_values)
 
-    def crossover(self, other: StepSolution):
+    def crossover(self, other: 'StepSolution'):
         crossover_point = random.randint(1, len(self.genes) - 1)
 
         child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
@@ -66,7 +65,7 @@ class StepSolution(Solution):
         return [StepSolution(child_a), StepSolution(child_b)]
 
     @lru_cache(maxsize=512)
-    def similarity(self, other: StepSolution):
+    def similarity(self, other: 'StepSolution'):
 
         diff = 0
         for i in range(self.problem.n_dim):
