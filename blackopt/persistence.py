@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from typing import Callable, List, NoReturn
 from blackopt.abc import Solver
 
@@ -12,7 +10,7 @@ class ContinuousOptimizer:
         problem,
         solver_factory: Callable[[], Solver],
         evals_per_step=1_000_000,
-        step_callbacks: List[Callable[[ContinuousOptimizer], NoReturn]]= None,
+        step_callbacks: List[Callable[['ContinuousOptimizer'], NoReturn]]= None,
         max_repeats = 10
     ):
         self.problem = problem
