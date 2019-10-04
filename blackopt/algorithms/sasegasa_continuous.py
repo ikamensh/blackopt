@@ -65,6 +65,7 @@ class SasegasaContinuous(Solver):
     def population(self):
         population = []
         for v in self.villages:
+            random.shuffle(v.population)
             population += v.population
         return population
 
