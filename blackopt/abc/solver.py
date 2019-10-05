@@ -8,6 +8,8 @@ from ilya_ezplot import Metric
 import dill
 
 from blackopt.abc import Problem, Solution
+from blackopt.config import get_rootdir
+from blackopt.exceptions import BlackoptException
 
 
 class keydefaultdict(defaultdict):
@@ -20,7 +22,7 @@ class keydefaultdict(defaultdict):
 
 
 class Solver(abc.ABC):
-    checkpoints_folder = "_checkpoints"
+    checkpoints_folder = "checkpoints"
 
     name: str = None
     best_solution: Solution = None
@@ -35,7 +37,6 @@ class Solver(abc.ABC):
             lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
         )
 
-        self.checkpoint_path = os.path.join(self.checkpoints_folder, str(self.problem))
 
 
     def record(self):
@@ -51,25 +52,29 @@ class Solver(abc.ABC):
         raise NotImplementedError()
 
     def checkpoint(self):
-        os.makedirs(self.checkpoint_path, exist_ok=True)
+        path = os.path.join(get_rootdir(), self.checkpoints_folder, str(self.problem))
+        os.makedirs(path, exist_ok=True)
         timestamp = datetime.datetime.now().strftime("%y-%m-%d_%H-%M-%S")
 
-        with open(os.path.join(self.checkpoint_path, timestamp), 'wb') as f:
+        with open(os.path.join(path, timestamp), 'wb') as f:
             dill.dump(self, f)
 
     @staticmethod
     def restore_latest(problem: Problem) -> 'Solver':
-        directory = os.path.join(Solver.checkpoints_folder, str(problem))
-        checkpoints = os.listdir(directory)
-
-        if len(checkpoints) == 0:
-            raise Exception(f"No checkpoints found in directory {directory}")
+        directory = os.path.join(get_rootdir(), Solver.checkpoints_folder, str(problem))
+        try:
+            checkpoints = os.listdir(directory)
+        except FileNotFoundError:
+            raise BlackoptException(f"The checkpoint directory {directory} doesn't exist. Were any checkpoints made?")
         else:
-            cp = sorted(checkpoints)[-1]
-            with open(os.path.join(directory, cp), 'rb') as f:
-                restored = dill.load(f)
-                assert isinstance(restored, Solver)
-                return restored
+            if len(checkpoints) == 0:
+                raise BlackoptException(f"No checkpoints found in directory {directory}")
+            else:
+                cp = sorted(checkpoints)[-1]
+                with open(os.path.join(directory, cp), 'rb') as f:
+                    restored = dill.load(f)
+                    assert isinstance(restored, Solver)
+                    return restored
 
     def __str__(self):
         return str(self.name)

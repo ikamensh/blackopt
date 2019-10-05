@@ -6,13 +6,14 @@ if TYPE_CHECKING:
     from blackopt.abc import Solution
 
 import uuid
+from blackopt.config import get_rootdir
 
 
 class Problem(abc.ABC):
     eval_count: int = None
     score_span: float = 1
 
-    store_dir = "_problems"
+    store_dir = "problems"
 
     @abc.abstractmethod
     def evaluate(self, s: 'Solution') -> float:
@@ -23,20 +24,21 @@ class Problem(abc.ABC):
         raise NotImplementedError()
 
     def save(self):
-        os.makedirs(self.store_dir, exist_ok=True)
+        folder = os.path.join(get_rootdir(), self.store_dir)
+        os.makedirs(folder, exist_ok=True)
         identifier = str(self)
 
-        existing = os.listdir(self.store_dir)
+        existing = os.listdir(folder)
         if identifier in existing:
-            identifier += uuid.uuid4()
+            identifier += str(uuid.uuid4())
 
-        with open(os.path.join(self.store_dir, identifier), 'wb') as f:
+        with open(os.path.join(folder, identifier), 'wb') as f:
             dill.dump(self, f)
-            print(f"Stored problem as {identifier}")
+            print(f"Stored problem as '{identifier}' at {folder}")
 
     @staticmethod
     def load(identifier: str) -> 'Problem':
-        directory = os.path.join(Problem.store_dir)
+        directory = os.path.join(get_rootdir(), Problem.store_dir)
 
         with open(os.path.join(directory, identifier), 'rb') as f:
             restored = dill.load(f)

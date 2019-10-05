@@ -1,0 +1,6 @@
+ilya-ezplot
+pathos
+numpy
+structlog
+pytest
+pytest-timeout

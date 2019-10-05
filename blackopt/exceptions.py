@@ -1,0 +1,2 @@
+class BlackoptException(Exception):
+    pass

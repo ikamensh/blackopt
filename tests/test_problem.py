@@ -11,3 +11,4 @@ class EasyProblem(Problem):
 
 def test_problem():
     ep = EasyProblem()
+

@@ -16,7 +16,7 @@ def test_random_search():
     assert isinstance(rs.best_solution.score, (int, float))
 
 
-def test_checkpoint():
+def test_checkpoint(with_tmp_root):
     rs = RandomSearch(EasyProblem(), EasySolution)
     best_score = rs.best_solution.score
 
