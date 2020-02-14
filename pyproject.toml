@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "blackopt"
+version = "0.1.0"
+description = "black box optimization library"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+numpy = "^1.18.1"
+pathos = "^0.2.5"
+ilya-ezplot = "^0.11"
+structlog = "^20.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3.5"
+pytest-timeout = "^1.3.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
