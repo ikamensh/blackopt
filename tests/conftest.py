@@ -1,17 +1,18 @@
-import pytest
-from blackopt.config import set_rootdir, get_rootdir
-
-from blackopt.examples.problems import TspSolution, TspProblem
-from blackopt.examples.problems import BumpySolution, BumpyProblem
-from blackopt.examples.problems import StepSolution, StepProblem
-
+import os
 import sys
 
-import os
+import pytest
 
 cur_dir = os.path.dirname(__file__)
 blackopt_dir = os.path.join(cur_dir, "..", "blackopt")
 sys.path.append(blackopt_dir)
+
+from blackopt.config import set_rootdir, get_rootdir
+from blackopt.examples.problems import TspSolution, TspProblem
+from blackopt.examples.problems import BumpySolution, BumpyProblem
+from blackopt.examples.problems import StepSolution, StepProblem
+
+
 
 @pytest.fixture()
 def with_tmp_root(tmpdir):
