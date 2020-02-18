@@ -33,7 +33,10 @@ if __name__ == '__main__':
     def mytest():
         print("Start")
         for i in range(1, 10):
-            time.sleep(1)
-            print("%d seconds have passed" % i)
+            try:
+                time.sleep(1)
+                print("%d seconds have passed" % i)
+            except Exception:
+                print("Caught something")
 
     mytest()
