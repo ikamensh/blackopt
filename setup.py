@@ -36,5 +36,5 @@ setup(
     long_description="In a far, far away galaxy...",
     install_requires=get_requirements(),
     python_requires=">=3.6",
-    url="https://github.com/ikamensh/optim",
+    # url="https://github.com/ikamensh/blackopt",
 )
