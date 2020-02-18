@@ -17,7 +17,7 @@ class RandomSearch(Solver):
                 self.record()
 
 
-import pathos
+import multiprocessing
 import dill
 
 class MulticoreRS(Solver):
@@ -25,8 +25,8 @@ class MulticoreRS(Solver):
 
     def solve(self, steps):
         self.problem.eval_count = 0
-        pool = pathos.pools.ProcessPool()
-        n_cpus = pool.ncpus
+        pool = multiprocessing.Pool()
+        n_cpus = pool._processes
 
         mapping_steps = int(steps ** (1 / 5))
         self.steps_per_pool = steps // (n_cpus * mapping_steps)

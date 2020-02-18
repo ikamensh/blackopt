@@ -1,4 +1,3 @@
 ilya-ezplot
-pathos
 numpy
 structlog

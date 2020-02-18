@@ -3,7 +3,7 @@ from typing import List, Tuple
 from blackopt.abc.solver import Solver
 from blackopt.algorithms import GeneticAlgorithm
 
-import pathos
+import multiprocessing
 
 import random
 
@@ -25,13 +25,13 @@ class MulticoreGeneticAlgorithm(Solver):
         super().__init__(problem, solution_cls)
         self.args = args
         self.kwargs = kwargs
-        self.pool = pathos.pools.ProcessPool()
-        self.gas: List[GeneticAlgorithm] = [GeneticAlgorithm(problem, solution_cls, *args, **kwargs) for i in range(self.pool.ncpus)]
+        self.pool = multiprocessing.Pool()
+        self.gas: List[GeneticAlgorithm] = [GeneticAlgorithm(problem, solution_cls, *args, **kwargs) for i in range(self.pool._processes)]
 
     def solve(self, steps):
         self.problem.eval_count = 0
         mapping_steps = int(steps ** (1 / 5))
-        steps_per_pool = steps // (self.pool.ncpus * mapping_steps)
+        steps_per_pool = steps // (self.pool._processes * mapping_steps)
 
         print(steps_per_pool)
         print(mapping_steps)
@@ -50,9 +50,9 @@ class MulticoreGeneticAlgorithm(Solver):
             self.best_solution = max(
                 [s.best_solution for s in self.gas] + [self.best_solution], key=lambda x: x.score
             )
-            self.problem.eval_count += steps_per_pool * self.pool.ncpus
+            self.problem.eval_count += steps_per_pool * self.pool._processes
             self.record()
-            print(i * steps_per_pool * self.pool.ncpus)
+            print(i * steps_per_pool * self.pool._processes)
 
 
 

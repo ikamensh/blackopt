@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 import random
 
-import pathos
+import multiprocessing
 
 
 def iteration(inp: Tuple[Rapga, int]):
@@ -42,8 +42,8 @@ class SasegasaContinuous(Solver):
         self.elite_size = elite_size
         self.equal_chances = equal_chances
         self.max_selective_pressure = max_selective_pressure
-        self.pool = pathos.pools.ProcessPool()
-        self.n_villages = n_villages or int(self.pool.ncpus * 1.2)
+        self.pool = multiprocessing.Pool()
+        self.n_villages = n_villages or int(self.pool._processes * 1.2)
 
         self.villages = [
             Rapga(

@@ -13,13 +13,17 @@ from blackopt.exceptions import BlackoptException
 
 
 class keydefaultdict(defaultdict):
-    def __missing__(self, key):
-        if self.default_factory is None:
-            raise KeyError(key)
-        else:
-            ret = self[key] = self.default_factory(key)
-            return ret
+    def __init__(self, func, metric_name):
+        super().__init__(func)
+        self.metric_name = metric_name
 
+    def __missing__(self, key):
+        ret = self[key] = self.default_factory( (self.metric_name, key) )
+        return ret
+
+def inner(x):
+    name, k = x
+    return Metric(name=name, y_label=k, x_label="evaluations")
 
 class Solver(abc.ABC):
     checkpoints_folder = "checkpoints"
@@ -34,7 +38,7 @@ class Solver(abc.ABC):
         self.solution_cls = solution_cls
         self.best_solution: Solution = self.solution_cls.random_solution()
         self.metrics: DefaultDict[str, Metric] = keydefaultdict(
-            lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
+            inner, str(self)
         )
 
 

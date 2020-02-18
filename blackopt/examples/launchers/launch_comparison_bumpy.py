@@ -17,11 +17,12 @@ solvers.append(SolverFactory(RandomSearch, problem, BumpySolution))
 n_steps = int(1e4)
 n_trials = 12
 
-import time
-t = time.time()
-ms = compare_solvers(n_trials, n_steps, solvers)
-print(time.time() - t)
+if __name__ == "__main__":
+    import time
+    t = time.time()
+    ms = compare_solvers(n_trials, n_steps, solvers)
+    print(time.time() - t)
 
-generate_report(problem, ms)
+    generate_report(problem, ms)
 
 

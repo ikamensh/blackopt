@@ -3,7 +3,7 @@ from blackopt.abc import Problem, Solver
 from typing import List, Tuple
 
 
-import pathos
+import multiprocessing
 
 
 def iteration(inp: Tuple[Rapga, int]):
@@ -41,7 +41,7 @@ class Sasegasa(Solver):
 
         super().__init__(problem, solution_cls)
 
-        self.pool = pathos.pools.ProcessPool()
+        self.pool = multiprocessing.Pool()
 
     def solve(self, steps):
         self.problem.eval_count = 0

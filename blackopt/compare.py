@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict
 from collections import defaultdict
+import multiprocessing
 
-import pathos
 
 if TYPE_CHECKING:
     from blackopt.abc import Solver
@@ -25,24 +25,32 @@ def one_trial(steps: int, solver_constructor: SolverFactory) -> DefaultDict[str,
     return s.metrics
 
 
-def n_runs(trials: int, steps: int, solver: SolverFactory) -> 'Metric':
+# def n_runs(trials: int, steps: int, solver: SolverFactory) -> 'Metric':
+#
+#     pool = multiprocessing.Pool()
+#     metrics = pool.map(lambda x: one_trial(steps, solver), "x" * trials)
+#
+#     return sum(metrics)
 
-    pool = pathos.pools.ProcessPool()
-    metrics = pool.map(lambda x: one_trial(steps, solver), "x" * trials)
 
-    return sum(metrics)
+def inner( x ):
+    steps, solver = x
+    return one_trial(steps, solver)
 
+def inner_defaultdict():
+    return defaultdict(list)
 
 def compare_solvers(
     trials: int, steps: int, solvers: List[SolverFactory]
 ) -> Dict[SolverFactory, Dict[str, 'Metric']]:
-    pool = pathos.pools.ProcessPool()
+    pool = multiprocessing.Pool()
+    to_map = [(steps, s) for s in solvers] * trials
+    print(f"Using process pool with {pool._processes} CPUs")
 
-    to_map = solvers * trials
     metrics: List[Dict[str, 'Metric']] = pool.map(
-        lambda solver: one_trial(steps, solver), solvers * trials
+        inner, to_map
     )
-    solver_to_metrics = defaultdict(lambda :defaultdict(list))
+    solver_to_metrics = defaultdict(inner_defaultdict)
     for sf, ms in zip(to_map, metrics):
         for key, metric in ms.items():
             solver_to_metrics[sf][key].append(metric)
