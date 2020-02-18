@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict
+from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict, Iterator
 from collections import defaultdict
 
 import pathos
@@ -34,14 +34,18 @@ def n_runs(trials: int, steps: int, solver: SolverFactory) -> 'Metric':
 
 
 def compare_solvers(
-    trials: int, steps: int, solvers: List[SolverFactory]
+    trials: int, steps: int, solvers: List[SolverFactory], single_process: bool = True
 ) -> Dict[SolverFactory, Dict[str, 'Metric']]:
-    pool = pathos.pools.ProcessPool()
 
     to_map = solvers * trials
-    metrics: List[Dict[str, 'Metric']] = pool.map(
-        lambda solver: one_trial(steps, solver), solvers * trials
-    )
+    mapping = lambda solver: one_trial(steps, solver)
+    if single_process:
+        metrics = map(mapping, to_map)
+    else:
+        pool = pathos.pools.ProcessPool()
+        metrics: Iterator[Dict[str, 'Metric']] = pool.map(
+            mapping, to_map
+        )
     solver_to_metrics = defaultdict(lambda :defaultdict(list))
     for sf, ms in zip(to_map, metrics):
         for key, metric in ms.items():

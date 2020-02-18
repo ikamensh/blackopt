@@ -21,7 +21,6 @@ class GeneticAlgorithm(Solver):
         equal_chances: float = 0.5
     ):
 
-        assert 0 < mutation_rate <= 1
         assert 0 <= equal_chances <= 1
         assert popsize > 1
         assert popsize > elite_size

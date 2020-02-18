@@ -1,6 +1,6 @@
 import signal
 
-class UserTimeoutError(Exception):
+class UserTimeoutError(BaseException):
     def __str__(self):
         return "Timed Out"
 
@@ -13,14 +13,13 @@ def timeout(t):
             assert old is signal.SIG_DFL
             signal.setitimer(signal.ITIMER_REAL, t)
             try:
-                result = f(*args, **kwargs)
+                return f(*args, **kwargs)
             finally:
                 try:
                     signal.setitimer(signal.ITIMER_REAL, 0)
                     signal.signal(signal.SIGALRM, old)
                 except UserTimeoutError:
                     signal.signal(signal.SIGALRM, old)
-            return result
         return new_f
     return decorate
 
