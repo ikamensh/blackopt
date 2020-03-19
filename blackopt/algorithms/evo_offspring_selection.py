@@ -1,14 +1,14 @@
 from typing import List
 
 from blackopt.abc import Solution, Problem
-from blackopt.algorithms import GeneticAlgorithm
+from blackopt.algorithms import EvolutionaryAlgorithm
 
 
 def keep(child_score: float, parent_min: float, diff: float, pressure: float):
     return child_score > parent_min + pressure * diff
 
 
-class Gaos(GeneticAlgorithm):
+class Gaos(EvolutionaryAlgorithm):
     name = "Gaos"
 
     def __init__(

@@ -37,8 +37,6 @@ class Solver(abc.ABC):
             lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
         )
 
-
-
     def record(self):
         solution_metric_dict = self.best_solution.metrics()
         for k, v in solution_metric_dict.items():
@@ -65,7 +63,8 @@ class Solver(abc.ABC):
         try:
             checkpoints = os.listdir(directory)
         except FileNotFoundError:
-            raise BlackoptException(f"The checkpoint directory {directory} doesn't exist. Were any checkpoints made?")
+            raise BlackoptException(
+                f"The checkpoint directory {directory} doesn't exist. Were any checkpoints made?")
         else:
             if len(checkpoints) == 0:
                 raise BlackoptException(f"No checkpoints found in directory {directory}")

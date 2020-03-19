@@ -8,7 +8,7 @@ from blackopt.abc.solver import Solver
 
 
 
-class GeneticAlgorithm(Solver):
+class EvolutionaryAlgorithm(Solver):
     name = "GA"
 
     def __init__(
@@ -45,18 +45,18 @@ class GeneticAlgorithm(Solver):
     def solve(self, steps):
         self.problem.eval_count = 0
         while self.problem.eval_count < steps:
-
-            next_generation = self.population[: self.elite_size]
-            next_generation += self._breed(self.popsize - self.elite_size)
-            self.population = next_generation
-
-            self._rank()
-            self.record()
-            self.generation += 1
-            if not self.generation % 100:
-                print("Generation", self.generation, self.problem.eval_count)
-
+            self.step()
         self.salut()
+
+    def step(self):
+        next_generation = self.population[: self.elite_size]
+        next_generation += self._breed(self.popsize - self.elite_size)
+        self.population = next_generation
+        self._rank()
+        self.record()
+        self.generation += 1
+        if not self.generation % 100:
+            print("Generation", self.generation, self.problem.eval_count)
 
     def salut(self):
         print(f"{self} is Done in {self.generation} generations / {self.problem.eval_count} evaluations.")

@@ -1,6 +1,6 @@
 from blackopt.examples.problems import TspProblem, TspSolution
 from blackopt.algorithms import RandomSearch
-from blackopt.algorithms import GeneticAlgorithm
+from blackopt.algorithms import EvolutionaryAlgorithm
 from blackopt.util.document import generate_report
 
 
@@ -27,7 +27,7 @@ for problem in problems:
                 # style["linewidth"] = linewidth
                 # style["color"] = color
                 ga = SolverFactory(
-                    GeneticAlgorithm,
+                    EvolutionaryAlgorithm,
                     problem,
                     TspSolution,
                     popsize,

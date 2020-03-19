@@ -1,6 +1,6 @@
 from blackopt.examples.problems import TspProblem, TspSolution
 from blackopt.algorithms import RandomSearch, HillClimber, Gaos, Rapga, Sasegasa
-from blackopt.algorithms import GeneticAlgorithm, SimAnneal
+from blackopt.algorithms import EvolutionaryAlgorithm, SimAnneal
 from blackopt.util.document import generate_report
 
 
