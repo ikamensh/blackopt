@@ -1,6 +1,6 @@
 import os
 import abc
-from typing import ClassVar, Dict, DefaultDict, SupportsFloat
+from typing import ClassVar, DefaultDict, SupportsFloat
 from collections import defaultdict
 import datetime
 
@@ -21,6 +21,10 @@ class keydefaultdict(defaultdict):
             return ret
 
 
+class EarlyStopException(Exception):
+    pass
+
+
 class Solver(abc.ABC):
     checkpoints_folder = "checkpoints"
 
@@ -37,18 +41,24 @@ class Solver(abc.ABC):
             lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
         )
 
-
-
     def record(self):
-        solution_metric_dict = self.best_solution.metrics()
-        for k, v in solution_metric_dict.items():
+        for k, v in self.best_solution.metrics().items():
             self.record_metric(f"best_{k}", v)
 
     def record_metric(self, name: str, val: SupportsFloat):
         self.metrics[name].add_record(self.problem.eval_count, val)
 
-    @abc.abstractmethod
     def solve(self, steps):
+        self.problem.eval_count = 0
+        try:
+            while self.problem.eval_count < steps:
+                self.step()
+        except EarlyStopException:
+            print(f"{self} finished optimization with an EarlyStopException.")
+        self.salut()
+
+    @abc.abstractmethod
+    def step(self):
         raise NotImplementedError()
 
     def checkpoint(self):
@@ -56,25 +66,32 @@ class Solver(abc.ABC):
         os.makedirs(path, exist_ok=True)
         timestamp = datetime.datetime.now().strftime("%y-%m-%d_%H-%M-%S")
 
-        with open(os.path.join(path, timestamp), 'wb') as f:
+        with open(os.path.join(path, timestamp), "wb") as f:
             dill.dump(self, f)
 
     @staticmethod
-    def restore_latest(problem: Problem) -> 'Solver':
+    def restore_latest(problem: Problem) -> "Solver":
         directory = os.path.join(get_rootdir(), Solver.checkpoints_folder, str(problem))
         try:
             checkpoints = os.listdir(directory)
         except FileNotFoundError:
-            raise BlackoptException(f"The checkpoint directory {directory} doesn't exist. Were any checkpoints made?")
+            raise BlackoptException(
+                f"The checkpoint directory {directory} doesn't exist. Were any checkpoints made?"
+            )
         else:
             if len(checkpoints) == 0:
-                raise BlackoptException(f"No checkpoints found in directory {directory}")
+                raise BlackoptException(
+                    f"No checkpoints found in directory {directory}"
+                )
             else:
                 cp = sorted(checkpoints)[-1]
-                with open(os.path.join(directory, cp), 'rb') as f:
+                with open(os.path.join(directory, cp), "rb") as f:
                     restored = dill.load(f)
                     assert isinstance(restored, Solver)
                     return restored
 
     def __str__(self):
         return str(self.name)
+
+    def salut(self):
+        print(f"{self} is Done with {self.problem.eval_count} evaluations.")

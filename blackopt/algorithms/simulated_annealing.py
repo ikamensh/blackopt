@@ -60,11 +60,14 @@ class SimAnneal(Solver):
         doc_freq = 1 + steps // 500
 
         while self.problem.eval_count < steps:
-            candidate = self.current_solution.mutate(self.mutation_rate)
-            self.maybe_accept(candidate)
-            self.temp *= self.alpha
+            self.step()
             if not self.problem.eval_count % doc_freq :
                 self.record()
+
+    def step(self):
+        candidate = self.current_solution.mutate(self.mutation_rate)
+        self.maybe_accept(candidate)
+        self.temp *= self.alpha
 
     def __str__(self):
         return f"{self.name} mr-{self.mutation_rate} ht-{self.half_times} t-{self.temp_initial}"

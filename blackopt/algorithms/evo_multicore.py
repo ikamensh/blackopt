@@ -1,14 +1,14 @@
 from typing import List, Tuple
 
 from blackopt.abc.solver import Solver
-from blackopt.algorithms import GeneticAlgorithm
+from blackopt.algorithms import EvolutionaryAlgorithm
 
 import pathos
 
 import random
 
 
-def iteration(inp: Tuple[GeneticAlgorithm, int]):
+def iteration(inp: Tuple[EvolutionaryAlgorithm, int]):
     ga, steps = inp
     ga.solution_cls.problem = ga.problem
     ga.record = lambda : None
@@ -26,7 +26,7 @@ class MulticoreGeneticAlgorithm(Solver):
         self.args = args
         self.kwargs = kwargs
         self.pool = pathos.pools.ProcessPool()
-        self.gas: List[GeneticAlgorithm] = [GeneticAlgorithm(problem, solution_cls, *args, **kwargs) for i in range(self.pool.ncpus)]
+        self.gas: List[EvolutionaryAlgorithm] = [EvolutionaryAlgorithm(problem, solution_cls, *args, **kwargs) for i in range(self.pool.ncpus)]
 
     def solve(self, steps):
         self.problem.eval_count = 0

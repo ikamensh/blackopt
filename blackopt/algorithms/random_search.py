@@ -16,6 +16,11 @@ class RandomSearch(Solver):
                 print(i)
                 self.record()
 
+    def step(self):
+        solution = self.solution_cls.random_solution()
+        if solution.score > self.best_solution.score:
+            self.best_solution = solution
+
 
 import pathos
 import dill

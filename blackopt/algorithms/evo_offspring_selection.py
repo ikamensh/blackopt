@@ -1,14 +1,14 @@
 from typing import List
 
-from blackopt.abc import Solution, Problem
-from blackopt.algorithms import GeneticAlgorithm
+from blackopt.abc import Solution, Problem, EarlyStopException
+from blackopt.algorithms import EvolutionaryAlgorithm
 
 
 def keep(child_score: float, parent_min: float, diff: float, pressure: float):
     return child_score > parent_min + pressure * diff
 
 
-class Gaos(GeneticAlgorithm):
+class Gaos(EvolutionaryAlgorithm):
     name = "Gaos"
 
     def __init__(
@@ -19,10 +19,12 @@ class Gaos(GeneticAlgorithm):
         mutation_rate: float,
         elite_size: int = 0,
         equal_chances: float = 0.5,
-        max_selective_pressure = 200,
-        early_stop = True,
+        max_selective_pressure=200,
+        early_stop=True,
     ):
-        super().__init__(problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances)
+        super().__init__(
+            problem, solution_cls, popsize, mutation_rate, elite_size, equal_chances
+        )
         self.max_selective_pressure = max_selective_pressure
         self.early_stop = early_stop
 
@@ -51,11 +53,9 @@ class Gaos(GeneticAlgorithm):
 
         self.salut()
 
-
     def record(self):
         super().record()
         self.record_metric("selective pressure", self.selective_pressure)
-
 
     def _breed(self, n: int, pressure=0.5) -> List[Solution]:
 
