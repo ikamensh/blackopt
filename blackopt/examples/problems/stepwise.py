@@ -21,13 +21,7 @@ class StepProblem(Problem):
 
     @staticmethod
     def _step_function(values: List[float], thresholds: List[float]) -> int:
-        result = 0
-
-        for val, threshold in zip(values, thresholds):
-            if val > threshold:
-                result += 1
-
-        return result
+        return sum(1 for val, threshold in zip(values, thresholds) if val > threshold)
 
     def evaluate(self, s: 'StepSolution') -> int:
         self.eval_count += 1
@@ -67,9 +61,9 @@ class StepSolution(Solution):
     @lru_cache(maxsize=512)
     def similarity(self, other: 'StepSolution'):
 
-        diff = 0
-        for i in range(self.problem.n_dim):
-            diff += abs(self.genes[i] - other.genes[i])
+        diff = sum(
+            abs(self.genes[i] - other.genes[i]) for i in range(self.problem.n_dim)
+        )
 
         return 1 - diff / self.problem.n_dim
 

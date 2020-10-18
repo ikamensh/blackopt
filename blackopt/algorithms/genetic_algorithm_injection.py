@@ -21,7 +21,7 @@ class GeneticAlgorithmInject(GeneticAlgorithm):
 
     def _inject(self):
         best_solution = self.solution_cls.random_solution()
-        for i in range(self.inject_quality):
+        for _ in range(self.inject_quality):
             solution = self.solution_cls.random_solution()
             if solution.score > best_solution.score:
                 best_solution = solution

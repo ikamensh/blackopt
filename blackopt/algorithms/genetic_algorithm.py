@@ -85,9 +85,7 @@ class GeneticAlgorithm(Solver):
         ) + self.equal_chances / (1 - self.equal_chances + 1e-9)
         chances = chances / sum(chances)
         parent_indexes = np.random.choice(indexes, n, True, chances)
-        parents = np.array(self.population)[parent_indexes]
-
-        return parents
+        return np.array(self.population)[parent_indexes]
 
     def _breed(self, n: int) -> List[Solution]:
 

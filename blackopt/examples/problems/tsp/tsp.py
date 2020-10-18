@@ -28,11 +28,8 @@ class TspProblem(Problem):
 
     @staticmethod
     def route_distance(route: List[City]):
-        pathDistance = 0
         path = route + [route[0]]
-        for i in range(0, len(path) - 1):
-            pathDistance += path[i].distance(path[i + 1])
-        return pathDistance
+        return sum(path[i].distance(path[i + 1]) for i in range(len(path) - 1))
 
     def __str__(self):
         return f"Tsp {len(self.cities)} cities & {self.n_dim} dim"

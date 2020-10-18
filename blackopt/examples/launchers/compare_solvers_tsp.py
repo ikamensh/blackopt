@@ -12,13 +12,8 @@ n_trials = 6
 cities = 60
 problem = TspProblem.random_problem(2, cities)
 
-solvers = []
+solvers = [SolverFactory(Rapga, problem, TspSolution, 300, 2 / cities, 0, 0.5)]
 
-solvers.append(
-    SolverFactory(
-        Rapga, problem, TspSolution, 300, 2 / cities, 0, 0.5
-    )
-)
 solvers.append(
     SolverFactory(
         Rapga, problem, TspSolution, 300, 2 / cities, 0, 0.5, regularize=True
