@@ -17,8 +17,7 @@ problems = [
 
 for problem in problems:
 
-    solvers = []
-    solvers.append(SolverFactory(RandomSearch, problem, TspSolution))
+    solvers = [SolverFactory(RandomSearch, problem, TspSolution)]
     for popsize in [10, 50]:
         for elite_size in [1, popsize // 10]:
             for mr in [5e-4, 5e-3, 0.01]:

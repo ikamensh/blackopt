@@ -40,8 +40,9 @@ class MulticoreRS(Solver):
         for i in range(mapping_steps):
             solutions = pool.map(self._solve_pool, [to_solve] * n_cpus)
             self.best_solution = max(
-                (s for s in solutions + [self.best_solution]), key=lambda x: x.score
+                solutions + [self.best_solution], key=lambda x: x.score
             )
+
             self.problem.eval_count += self.steps_per_pool * n_cpus
             self.record()
             print(i * n_cpus * self.steps_per_pool)

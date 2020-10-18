@@ -29,7 +29,6 @@ def test_tolerant_to_occasional_errors(with_tmp_root, tsp_problem):
     def fake_solve(self, *args, **kwargs):
         nonlocal pytest_ctr
         if pytest_ctr >= 5:
-            pass
             raise Exception("Broken beyond repair")
         else:
             pytest_ctr += 1

@@ -79,8 +79,8 @@ class BumpySolution(Solution):
     @lru_cache(maxsize=512)
     def similarity(self, other: 'BumpySolution'):
 
-        diff = 0
-        for i in range(self.problem.n_dim):
-            diff += abs(self.genes[i] - other.genes[i])
+        diff = sum(
+            abs(self.genes[i] - other.genes[i]) for i in range(self.problem.n_dim)
+        )
 
         return 1 - diff / self.problem.n_dim
