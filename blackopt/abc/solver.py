@@ -9,7 +9,7 @@ import dill
 
 from blackopt.abc import Problem, Solution
 from blackopt.config import get_rootdir
-from blackopt.exceptions import BlackoptException
+from blackopt.exceptions import BlackoptException, EarlyStopException
 
 
 class keydefaultdict(defaultdict):
@@ -21,11 +21,9 @@ class keydefaultdict(defaultdict):
             return ret
 
 
-class EarlyStopException(Exception):
-    pass
-
-
 class Solver(abc.ABC):
+    """Solver is a class that encapsulates an optimization strategy."""
+
     checkpoints_folder = "checkpoints"
 
     name: str = None

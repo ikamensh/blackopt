@@ -57,5 +57,3 @@ def compare_solvers(
             result[sf][key] = sum(lst)
 
     return result
-
-

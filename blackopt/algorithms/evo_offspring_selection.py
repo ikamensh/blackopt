@@ -1,6 +1,7 @@
 from typing import List
 
-from blackopt.abc import Solution, Problem, EarlyStopException
+from blackopt.abc import Solution, Problem
+from blackopt.exceptions import EarlyStopException
 from blackopt.algorithms import EvolutionaryAlgorithm
 
 

@@ -1,5 +1,6 @@
 from blackopt.algorithms import Gaos
-from blackopt.abc import Problem, EarlyStopException
+from blackopt.abc import Problem
+from blackopt.exceptions import EarlyStopException
 import random
 
 

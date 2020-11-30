@@ -7,11 +7,9 @@ np.random.seed(1)
 class City:
 
     n_cities = 0
-    city_by_id = {}
 
     def __init__(self, ndim):
         self.uid = City.n_cities
-        City.city_by_id[self.uid] = self
         City.n_cities += 1
         self.coordinates = np.random.random(size=[ndim])
 

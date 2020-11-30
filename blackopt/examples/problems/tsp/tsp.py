@@ -9,7 +9,13 @@ from blackopt.examples.problems.tsp.city import City
 
 
 class TspProblem(Problem):
-    name = "Tsp"
+    """Traveling salesman problem. The problem is NP-hard.
+
+    An instance of a problem will have `n_dim` dimensions and `len(cities)` cities. A city is
+    a point in the N-dimensional space. A solution to TSP is a route that visits all cities
+    exactly once. The simplest representation of such a route is a sequence of cities.
+    """
+    name = "TSP"
 
     def __init__(self, cities: List[City]):
         self.cities = cities
@@ -35,21 +41,25 @@ class TspProblem(Problem):
         return pathDistance
 
     def __str__(self):
-        return f"Tsp {len(self.cities)} cities & {self.n_dim} dim"
+        return f"TSP with {len(self.cities)} cities in {self.n_dim}-dim space."
 
 
 class TspSolution(Solution):
+    problem: TspProblem
+
     def __init__(self, route: List[City]):
         self.route = route
         assert set(route) == set(self.problem.cities)
 
     @staticmethod
     def random_solution() -> 'TspSolution':
+        """ A random solution to a TSP is a random sequence of all its cities. """
         cpy = list(TspSolution.problem.cities)
         random.shuffle(cpy)
         return TspSolution(cpy)
 
     def mutate(self, mutationRate: float) -> 'TspSolution':
+        """For each city in the route, swap it with a random other city with given probability. """
         route = list(self.route)
 
         for i in range(len(route)):
@@ -68,7 +78,7 @@ class TspSolution(Solution):
 
         return [TspSolution(child_left + child_right)]
 
-    @lru_cache(maxsize=512)
+    @lru_cache(maxsize=1>>16)
     def similarity(self, other: 'TspSolution'):
         r1 = self.route
         r2 = other.route

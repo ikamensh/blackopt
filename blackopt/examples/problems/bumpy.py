@@ -17,6 +17,8 @@ def evaluate_sin(solution: List[float], expr: sin_expr) -> float:
 
 class BumpyProblem(Problem):
     """
+    The fitness landscape is a smooth surface with local optima.
+
     fitness = Sum ( sin(x_i * x_j + k) )
     """
 
@@ -50,6 +52,8 @@ class BumpyProblem(Problem):
 
 
 class BumpySolution(Solution):
+    problem: BumpyProblem
+
     def __init__(self, values):
         self.genes = values
 

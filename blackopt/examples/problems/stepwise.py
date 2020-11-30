@@ -6,6 +6,11 @@ from blackopt.abc import Problem, Solution
 
 
 class StepProblem(Problem):
+    """The fitness is a sum of step functions for each dimension.
+
+    The [1]*n_dim is aways an optimal solution, fitness is in range [0, n_dim].
+    """
+
     def __init__(self, thresholds: List[float]):
         self.n_dim = len(thresholds)
         self.score_span = len(thresholds)
@@ -29,7 +34,7 @@ class StepProblem(Problem):
 
         return result
 
-    def evaluate(self, s: 'StepSolution') -> int:
+    def evaluate(self, s: "StepSolution") -> int:
         self.eval_count += 1
         return self._step_function(s.genes, self.thresholds)
 
@@ -38,6 +43,8 @@ class StepProblem(Problem):
 
 
 class StepSolution(Solution):
+    problem: StepProblem
+
     def __init__(self, values):
         self.genes = values
 
@@ -56,7 +63,7 @@ class StepSolution(Solution):
 
         return StepSolution(new_values)
 
-    def crossover(self, other: 'StepSolution'):
+    def crossover(self, other: "StepSolution"):
         crossover_point = random.randint(1, len(self.genes) - 1)
 
         child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
@@ -65,13 +72,10 @@ class StepSolution(Solution):
         return [StepSolution(child_a), StepSolution(child_b)]
 
     @lru_cache(maxsize=512)
-    def similarity(self, other: 'StepSolution'):
+    def similarity(self, other: "StepSolution"):
 
         diff = 0
         for i in range(self.problem.n_dim):
             diff += abs(self.genes[i] - other.genes[i])
 
         return 1 - diff / self.problem.n_dim
-
-
-
