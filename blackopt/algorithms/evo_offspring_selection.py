@@ -1,7 +1,6 @@
 from typing import List
 
 from blackopt.abc import Solution, Problem
-from blackopt.exceptions import EarlyStopException
 from blackopt.algorithms import EvolutionaryAlgorithm
 
 
@@ -9,8 +8,9 @@ def keep(child_score: float, parent_min: float, diff: float, pressure: float):
     return child_score > parent_min + pressure * diff
 
 
-class Gaos(EvolutionaryAlgorithm):
-    name = "Gaos"
+class OffspringSelection(EvolutionaryAlgorithm):
+    """Evolutionary algorithm with offspring selection. """
+    name = "OffspringSelection"
 
     def __init__(
         self,
@@ -28,6 +28,8 @@ class Gaos(EvolutionaryAlgorithm):
         )
         self.max_selective_pressure = max_selective_pressure
         self.early_stop = early_stop
+        self.selective_pressure = 0
+
 
     def check_early_stop(self):
         return self.selective_pressure >= self.max_selective_pressure

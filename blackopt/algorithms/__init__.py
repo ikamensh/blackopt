@@ -1,5 +1,5 @@
 from blackopt.algorithms.evolutionary import EvolutionaryAlgorithm
-from blackopt.algorithms.evo_offspring_selection import Gaos
+from blackopt.algorithms.evo_offspring_selection import OffspringSelection
 from blackopt.algorithms.evo_relevant_alleles import Rapga
 from blackopt.algorithms.sasegasa import Sasegasa
 from blackopt.algorithms.sasegasa_continuous import SasegasaContinuous

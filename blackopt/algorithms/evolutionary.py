@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 
+from blackopt import EarlyStopException
 from blackopt.abc import Problem, Solution
 from blackopt.abc.solver import Solver
 
@@ -44,7 +45,11 @@ class EvolutionaryAlgorithm(Solver):
 
     def step(self):
         next_generation = self.population[: self.elite_size]
-        next_generation += self._breed(self.popsize - self.elite_size)
+        breed = self._breed(self.popsize - self.elite_size)
+        if not breed:
+            raise EarlyStopException
+
+        next_generation += breed
         self.population = next_generation
         self._rank()
         self.record()

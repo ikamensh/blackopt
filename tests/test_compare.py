@@ -1,4 +1,4 @@
-from blackopt.algorithms import HillClimber, EvolutionaryAlgorithm, SimAnneal, Gaos, Rapga
+from blackopt.algorithms import HillClimber, EvolutionaryAlgorithm, SimAnneal, OffspringSelection, Rapga
 from blackopt.examples.problems.stepwise import StepProblem, StepSolution
 from blackopt.algorithms import RandomSearch
 
@@ -15,7 +15,7 @@ def test_compare():
 
     for problem in problems:
         sfs += [SolverFactory(EvolutionaryAlgorithm, problem, StepSolution, 3, 1 / problem.n_dim, 1)]
-        sfs += [SolverFactory(Gaos, problem, StepSolution, 3, 1/problem.n_dim, 1)]
+        sfs += [SolverFactory(OffspringSelection, problem, StepSolution, 3, 1 / problem.n_dim, 1)]
         sfs += [SolverFactory(Rapga, problem, StepSolution, 3, 1/problem.n_dim, 1)]
         sfs += [SolverFactory(HillClimber,problem, StepSolution, mutation_rate=2/problem.n_dim)]
         sfs += [SolverFactory(SimAnneal, problem, StepSolution, mutation_rate=2 / problem.n_dim)]

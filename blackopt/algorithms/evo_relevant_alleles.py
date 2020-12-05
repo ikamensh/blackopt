@@ -1,4 +1,4 @@
-from blackopt.algorithms import Gaos
+from blackopt.algorithms import OffspringSelection
 from blackopt.abc import Problem
 from blackopt.exceptions import EarlyStopException
 import random
@@ -18,7 +18,7 @@ default_max_sel_pressure = 200
 default_div_threshold = 0.01
 
 
-class Rapga(Gaos):
+class Rapga(OffspringSelection):
     name = "Rapga"
 
     def __init__(
