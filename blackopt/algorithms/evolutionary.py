@@ -33,7 +33,7 @@ class EvolutionaryAlgorithm(Solver):
 
         super().__init__(problem, solution_cls)
 
-        self.population: List[Solution] = [solution_cls.random_solution() for _ in range(popsize)]
+        self.population = [solution_cls.random_solution() for _ in range(popsize)]
         self.generation = 1
         self.avg = None
         self._rank()

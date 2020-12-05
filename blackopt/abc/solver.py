@@ -1,6 +1,6 @@
 import os
 import abc
-from typing import ClassVar, DefaultDict, SupportsFloat
+from typing import ClassVar, DefaultDict, SupportsFloat, List
 from collections import defaultdict
 import datetime
 
@@ -38,6 +38,17 @@ class Solver(abc.ABC):
         self.metrics: DefaultDict[str, Metric] = keydefaultdict(
             lambda k: Metric(name=str(self), y_label=k, x_label="evaluations")
         )
+
+
+    @property
+    def population(self) -> List[Solution]:
+        if hasattr(self, "_population"):
+            return self._population
+        return [self.best_solution]
+
+    @population.setter
+    def population(self, value):
+        self._population = value
 
     def record(self):
         for k, v in self.best_solution.metrics().items():
