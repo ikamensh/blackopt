@@ -1,5 +1,5 @@
 from blackopt.algorithms import HillClimber, EvolutionaryAlgorithm, SimAnneal, Gaos, Rapga
-from blackopt.examples.problems import StepProblem, StepSolution
+from blackopt.examples.problems.stepwise import StepProblem, StepSolution
 from blackopt.algorithms import RandomSearch
 
 from blackopt.compare import compare_solvers, SolverFactory

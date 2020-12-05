@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING, ClassVar, Dict, DefaultDict, Iterator
+from typing import List, TYPE_CHECKING, Dict, DefaultDict, Iterator, Type
 from collections import defaultdict
 
 import pathos
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class SolverFactory:
-    def __init__(self, target_cls: ClassVar['Solver'], *args, **kwargs):
+    def __init__(self, target_cls: Type['Solver'], *args, **kwargs):
         self.target_cls = target_cls
         self.args = args
         self.kwargs = kwargs

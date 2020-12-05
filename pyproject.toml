@@ -1,9 +1,12 @@
 [tool.poetry]
 name = "blackopt"
-version = "0.1.0"
+version = "0.27.1"
 description = "black box optimization library"
-authors = ["Your Name <you@example.com>"]
+authors = ["Ilya Kamen <ikamenshchikov@gmail.com>"]
 license = "MIT"
+#packages = [
+#    { include = "blackopt", from = "src" },
+#]
 
 [tool.poetry.dependencies]
 python = "^3.6"
@@ -15,6 +18,8 @@ structlog = "^20.1.0"
 [tool.poetry.dev-dependencies]
 pytest = "^5.3.5"
 pytest-timeout = "^1.3.4"
+twine = "^"
+wheel = "^"
 
 [build-system]
 requires = ["poetry>=0.12"]

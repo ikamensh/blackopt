@@ -2,7 +2,7 @@ import pytest
 
 from blackopt.persistence import ContinuousOptimizer
 from blackopt.exceptions import BlackoptException
-from blackopt.examples.problems import TspSolution
+from blackopt.examples.problems.tsp import TspSolution
 from blackopt.algorithms import RandomSearch
 
 @pytest.mark.timeout(0.1)

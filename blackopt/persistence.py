@@ -1,4 +1,4 @@
-from typing import Callable, List, NoReturn, Optional
+from typing import Callable, List, Optional
 from blackopt.abc import Solver
 
 from blackopt.log import get_logger
@@ -10,7 +10,7 @@ class ContinuousOptimizer:
         self,
         solver: Solver,
         evals_per_step=1_000_000,
-        step_callbacks: List[Callable[['ContinuousOptimizer'], NoReturn]]= None,
+        step_callbacks: List[Callable[['ContinuousOptimizer'], None]]= None,
         max_repeats = 5,
         termination_condition: Optional[Callable[['ContinuousOptimizer'], bool]] = None
     ):
