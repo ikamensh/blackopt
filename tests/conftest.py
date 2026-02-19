@@ -1,11 +1,4 @@
-import os
-import sys
-
 import pytest
-
-cur_dir = os.path.dirname(__file__)
-blackopt_dir = os.path.join(cur_dir, "..")
-sys.path.append(blackopt_dir)
 
 from blackopt.config import set_rootdir, get_rootdir
 from blackopt.examples.problems.tsp import TspSolution, TspProblem

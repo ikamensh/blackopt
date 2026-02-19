@@ -21,7 +21,7 @@ solvers.append(
 )
 solvers.append(
     SolverFactory(
-        Rapga, problem, TspSolution, 300, 2 / cities, 0, 0.5, regularize=True
+        Rapga, problem, TspSolution, 300, 2 / cities, 0, 0.5
     )
 )
 

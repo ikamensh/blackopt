@@ -32,7 +32,7 @@ def get_logger(name="blackopt", logdir=LOGDIR, **initial_values):
             if os.stat(path).st_size != 0:
                 file_hdlr.doRollover()
         except FileNotFoundError:
-            # Rollover failed. prefer to overwrite old log instead terminating Moonfish.
+            # Rollover failed. prefer to overwrite old log instead of terminating blackopt.
             file_hdlr = rotating_file_handler(path)
 
     logger = logging.getLogger(name)

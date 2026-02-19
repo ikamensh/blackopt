@@ -1,7 +1,11 @@
-from blackopt.algorithms import OffspringSelection
-from blackopt.abc import Problem
-from blackopt.exceptions import EarlyStopException
+from __future__ import annotations
+
 import random
+from typing import Type
+
+from blackopt.abc import Problem, Solution
+from blackopt.algorithms import OffspringSelection
+from blackopt.exceptions import EarlyStopException
 
 
 def average_similarity(new, pop_sample):
@@ -24,7 +28,7 @@ class Rapga(OffspringSelection):
     def __init__(
         self,
         problem: Problem,
-        solution_cls,
+        solution_cls: Type[Solution],
         popsize: int,
         mutation_rate: float,
         elite_size: int = default_elite,
@@ -50,18 +54,16 @@ class Rapga(OffspringSelection):
     def check_early_stop(self):
         return super().check_early_stop() or self.actual_popsize < self.min_popsize
 
-    def solve(self, steps):
-        self.problem.eval_count = 0
-        while self.problem.eval_count < steps and self.actual_popsize:
-            pressure = 0.8 * self.problem.eval_count / steps
-            self.step(pressure)
-
-        self.salut()
-
-
-    def step(self, pressure = 0.5):
+    def step(self):
+        total = self._total_steps or self._DEFAULT_STEPS_ESTIMATE
+        pressure = min(0.8, 0.8 * self.problem.eval_count / total)
         popsize_sqrt = int(self.popsize ** (1 / 2)) + 1
         next_generation = self.population[: self.elite_size]
+
+        # Reset regularization_score on elite carry-overs so it doesn't
+        # accumulate indefinitely across generations.
+        for elite in next_generation:
+            elite.regularization_score = 0
 
         while len(next_generation) < self.popsize:
 
@@ -84,7 +86,7 @@ class Rapga(OffspringSelection):
             if self.selective_pressure >= self.max_selective_pressure:
                 raise EarlyStopException()
 
-        self.population = next_generation
+        self.population = next_generation[: self.popsize]
         self._rank()
         self.record()
         self.generation += 1
@@ -106,7 +108,7 @@ class Rapga(OffspringSelection):
         if self.equal_chances != default_eq_ch:
             string += f" & equal_c - {self.equal_chances}"
         if self.diversity_threshold != default_div_threshold:
-            f" & div threshold - {self.diversity_threshold}"
+            string += f" & div threshold - {self.diversity_threshold}"
 
         return string
 

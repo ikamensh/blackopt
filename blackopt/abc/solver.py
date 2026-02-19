@@ -1,10 +1,10 @@
 import os
 import abc
-from typing import ClassVar, DefaultDict, SupportsFloat, List
+from typing import DefaultDict, List, SupportsFloat, Type
 from collections import defaultdict
 import datetime
 
-from ilya_ezplot import Metric
+from blackopt.util.metric import Metric
 import dill
 
 from blackopt.abc import Problem, Solution
@@ -29,8 +29,8 @@ class Solver(abc.ABC):
     name: str = None
     best_solution: Solution = None
 
-    def __init__(self, problem: Problem, solution_cls: ClassVar[Solution]):
-        problem.eval_count = 0
+    def __init__(self, problem: Problem, solution_cls: Type[Solution]):
+        problem.eval_count = getattr(problem, "eval_count", 0)
         self.problem = problem
         solution_cls.problem = problem
         self.solution_cls = solution_cls

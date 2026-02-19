@@ -8,3 +8,8 @@ from blackopt.algorithms.evo_multicore import MulticoreGeneticAlgorithm
 from blackopt.algorithms.hill_climb import HillClimber
 from blackopt.algorithms.random_search import RandomSearch, MulticoreRS
 from blackopt.algorithms.simulated_annealing import SimAnneal
+from blackopt.algorithms.tabu_search import TabuSearch
+from blackopt.algorithms.truncation_selection_ga import TruncationSelectionGA, Eda
+from blackopt.algorithms.vns import VariableNeighborhoodSearch
+from blackopt.algorithms.differential_evolution import DifferentialEvolution
+from blackopt.algorithms.pso import ParticleSwarmOptimization

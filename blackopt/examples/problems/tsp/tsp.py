@@ -78,7 +78,7 @@ class TspSolution(Solution):
 
         return [TspSolution(child_left + child_right)]
 
-    @lru_cache(maxsize=1>>16)
+    @lru_cache(maxsize=1<<16)
     def similarity(self, other: 'TspSolution'):
         r1 = self.route
         r2 = other.route

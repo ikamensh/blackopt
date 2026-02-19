@@ -64,11 +64,11 @@ class StepSolution(Solution):
         return StepSolution(new_values)
 
     def crossover(self, other: "StepSolution"):
+        if len(self.genes) <= 1:
+            return [StepSolution(list(self.genes)), StepSolution(list(other.genes))]
         crossover_point = random.randint(1, len(self.genes) - 1)
-
         child_a = self.genes[:crossover_point] + other.genes[crossover_point:]
         child_b = other.genes[:crossover_point] + self.genes[crossover_point:]
-
         return [StepSolution(child_a), StepSolution(child_b)]
 
     @lru_cache(maxsize=512)

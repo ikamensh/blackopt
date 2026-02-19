@@ -1,7 +1,9 @@
-from blackopt.algorithms import Rapga
-from blackopt.abc import Problem, Solver
-from typing import List, Tuple
+from typing import List, Tuple, Type
 
+from blackopt.abc import Problem, Solution, Solver
+from blackopt.algorithms import Rapga
+
+import dill
 import random
 
 import pathos
@@ -24,19 +26,17 @@ class SasegasaContinuous(Solver):
     def __init__(
         self,
         problem: Problem,
-        solution_cls,
+        solution_cls: Type[Solution],
         popsize: int,
         mutation_rate: float,
         elite_size: int = 0,
         equal_chances: float = 0.5,
         max_selective_pressure: int = 200,
         diversity_threshold = 0.01,
-        n_villages = None
-
-
+        n_villages = None,
     ):
-        self.problem = problem
-        self.solution_cls = solution_cls
+        super().__init__(problem, solution_cls)
+
         self.popsize = popsize
         self.mutation_rate = mutation_rate
         self.elite_size = elite_size
@@ -45,23 +45,28 @@ class SasegasaContinuous(Solver):
         self.pool = pathos.pools.ProcessPool()
         self.n_villages = n_villages or int(self.pool.ncpus * 1.2)
 
-        self.villages = [
-            Rapga(
-                self.problem,
+        self.villages = []
+        for i in range(self.n_villages):
+            prob = dill.copy(self.problem)
+            prob.eval_count = 0
+            self.villages.append(Rapga(
+                prob,
                 self.solution_cls,
                 self.popsize,
                 self.mutation_rate,
                 self.elite_size,
                 self.equal_chances,
                 diversity_threshold=diversity_threshold,
-                max_selective_pressure = max_selective_pressure,
+                max_selective_pressure=max_selective_pressure,
                 early_stop=True,
-            )
-            for i in range(self.n_villages)
-        ]
+            ))
 
-        super().__init__(problem, solution_cls)
 
+    def step(self):
+        """SasegasaContinuous uses multi-process village management; use solve() directly."""
+        raise NotImplementedError(
+            "SasegasaContinuous does not support single-step execution. Use solve() instead."
+        )
 
     @property
     def population(self):
@@ -70,7 +75,6 @@ class SasegasaContinuous(Solver):
             random.shuffle(v.population)
             population += v.population
         return population
-
 
     def solve(self, steps):
 

@@ -1,8 +1,9 @@
+from typing import List, Tuple, Type
+
+from blackopt.abc import Problem, Solution, Solver
 from blackopt.algorithms import Rapga
-from blackopt.abc import Problem, Solver
-from typing import List, Tuple
 
-
+import dill
 import pathos
 
 
@@ -22,7 +23,7 @@ class Sasegasa(Solver):
     def __init__(
         self,
         problem: Problem,
-        solution_cls,
+        solution_cls: Type[Solution],
         popsize: int,
         mutation_rate: float,
         elite_size: int = 0,
@@ -30,8 +31,8 @@ class Sasegasa(Solver):
         growth_factor=30,
         n_villages=12,
     ):
-        self.problem = problem
-        self.solution_cls = solution_cls
+        super().__init__(problem, solution_cls)
+
         self.popsize = popsize
         self.mutation_rate = mutation_rate
         self.elite_size = elite_size
@@ -39,9 +40,13 @@ class Sasegasa(Solver):
         self.growth_factor = growth_factor
         self.n_villages = n_villages
 
-        super().__init__(problem, solution_cls)
-
         self.pool = pathos.pools.ProcessPool()
+
+    def step(self):
+        """Sasegasa uses multi-process village management; use solve() directly."""
+        raise NotImplementedError(
+            "Sasegasa does not support single-step execution. Use solve() instead."
+        )
 
     def solve(self, steps):
         self.problem.eval_count = 0
@@ -50,18 +55,20 @@ class Sasegasa(Solver):
         steps_per_run = steps // runs
         print(f"Sasegasa will run with {steps_per_run} steps per epoch/village")
 
-        villages = [
-            Rapga(
-                self.problem,
+        villages = []
+        for i in range(self.n_villages):
+            prob = dill.copy(self.problem)
+            prob.eval_count = 0
+            villages.append(Rapga(
+                prob,
                 self.solution_cls,
                 self.popsize,
                 self.mutation_rate,
                 self.elite_size,
                 self.equal_chances,
                 self.growth_factor,
-                early_stop=True
-            ) for i in range(self.n_villages)
-        ]
+                early_stop=True,
+            ))
 
         while len(villages) > 1:
             villages: List[Rapga] = self.pool.map(iteration, zip(villages, [steps_per_run] * len(villages)))

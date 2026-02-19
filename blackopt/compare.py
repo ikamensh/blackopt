@@ -5,7 +5,7 @@ import pathos
 
 if TYPE_CHECKING:
     from blackopt.abc import Solver
-    from ilya_ezplot import Metric
+    from blackopt.util.metric import Metric
 
 
 class SolverFactory:
@@ -25,7 +25,7 @@ def one_trial(steps: int, solver_constructor: SolverFactory) -> DefaultDict[str,
     return s.metrics
 
 
-def n_runs(trials: int, steps: int, solver: SolverFactory) -> 'Metric':
+def n_runs(trials: int, steps: int, solver: SolverFactory) -> DefaultDict[str, 'Metric']:
 
     pool = pathos.pools.ProcessPool()
     metrics = pool.map(lambda x: one_trial(steps, solver), "x" * trials)

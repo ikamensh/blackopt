@@ -16,4 +16,5 @@ class EasySolution(Solution):
         return [copy.deepcopy(random.choice([self, other]))]
 
 def test_solution():
-    return EasySolution()
+    sol = EasySolution()
+    assert sol is not None

@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List
+from typing import List, Type
 
 import numpy as np
 
@@ -8,14 +8,13 @@ from blackopt.abc import Problem, Solution
 from blackopt.abc.solver import Solver
 
 
-
 class EvolutionaryAlgorithm(Solver):
     name = "GA"
 
     def __init__(
         self,
         problem: Problem,
-        solution_cls,
+        solution_cls: Type[Solution],
         popsize: int,
         mutation_rate: float,
         elite_size: int = 0,
@@ -47,7 +46,7 @@ class EvolutionaryAlgorithm(Solver):
         next_generation = self.population[: self.elite_size]
         breed = self._breed(self.popsize - self.elite_size)
         if not breed:
-            raise EarlyStopException
+            raise EarlyStopException()
 
         next_generation += breed
         self.population = next_generation
@@ -79,9 +78,9 @@ class EvolutionaryAlgorithm(Solver):
             )
 
     def _select_parents(self, n: int) -> List[Solution]:
-        indexes = np.arange(0, len(self.population), dtype=np.int)
+        indexes = np.arange(0, len(self.population), dtype=np.intp)
         chances = np.arange(
-            len(self.population), 0, -1, dtype=np.int
+            len(self.population), 0, -1, dtype=np.intp
         ) + self.equal_chances / (1 - self.equal_chances + 1e-9)
         chances = chances / sum(chances)
         parent_indexes = np.random.choice(indexes, n, True, chances)
@@ -98,6 +97,10 @@ class EvolutionaryAlgorithm(Solver):
             parent_1 = parents[i]
             parent_2 = parents[len(parents) - i - 1]
             children += parent_1.crossover(parent_2)
+
+        # crossover() may return 1 or 2 children per pair, so trim to
+        # exactly n to keep population size stable.
+        children = children[:n]
 
         children = [child.mutate(self.mutation_rate) for child in children]
 

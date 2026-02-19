@@ -43,8 +43,8 @@ class MulticoreGeneticAlgorithm(Solver):
             if i > mapping_steps // 2:
                 all_population = sum( (ga.population for ga in self.gas), [])
                 random.shuffle(all_population)
-                for i, ga in enumerate(self.gas):
-                    ga.population = all_population[ga.popsize * i: ga.popsize*(i+1)]
+                for idx, ga in enumerate(self.gas):
+                    ga.population = all_population[ga.popsize * idx: ga.popsize * (idx + 1)]
                     ga._rank()
 
             self.best_solution = max(
